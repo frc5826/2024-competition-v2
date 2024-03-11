@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -11,10 +13,7 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -27,6 +26,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.vision.AprilTagResult;
+import frc.robot.vision.RingResult;
+import frc.robot.vision.RobotCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import java.io.IOException;
@@ -35,13 +37,13 @@ import java.util.*;
 import static frc.robot.positioning.FieldOrientation.getOrientation;
 
 //Code pulled from - https://github.com/STMARobotics/frc-7028-2023/blob/5916bb426b97f10e17d9dfd5ec6c3b6fda49a7ce/src/main/java/frc/robot/subsystems/PoseEstimatorSubsystem.java
-public class LocalizationSubsystem extends SubsystemBase {
+public class LocalizationSubsystem extends LoggedSubsystem {
 
     private AprilTagFieldLayout fieldLayout;
     private final VisionSubsystem visionSubsystem;
     private final SwerveSubsystem swerveSubsystem;
     private final SwerveDrivePoseEstimator poseEstimator;
-    private final HashSet<AprilTagResult> processed;
+    private final HashMap<Integer, AprilTagResult> processed;
     private Pose3d robotPos = new Pose3d();
 
     private final Field2d field = new Field2d();
@@ -66,7 +68,8 @@ public class LocalizationSubsystem extends SubsystemBase {
             fieldLayout = null;
             e.printStackTrace();
         }
-        this.processed = new HashSet<>();
+        this.processed = new HashMap<>();
+
         this.visionSubsystem = visionSubsystem;
         this.swerveSubsystem = swerveSubsystem;
 
@@ -99,8 +102,8 @@ public class LocalizationSubsystem extends SubsystemBase {
 
         if(fieldLayout != null){
             for(AprilTagResult result : visionSubsystem.getAprilTagResults()){
-                if(!processed.contains(result)) {
-                    processed.add(result);
+                if(!processed.containsKey(result.getId()) || !processed.get(result.getId()).equals(result)) {
+                    processed.put(result.getId(), result);
                     Optional<Pose3d> tagPose = fieldLayout.getTagPose(result.getId());
                     if (tagPose.isPresent()) {
                         Pose3d camPose = tagPose.get().transformBy(result.getAprilTagLocation().inverse());
@@ -171,6 +174,15 @@ public class LocalizationSubsystem extends SubsystemBase {
         Command path = AutoBuilder.pathfindToPose(targetPose, constraints);
 
         return path;
+    }
+
+    public Command buildPathThenFollow(Pose2d endPose, Pose2d startPose) {
+        List<Translation2d> points = PathPlannerPath.bezierFromPoses(startPose, endPose);
+
+        PathPlannerPath path = new PathPlannerPath(points , Constants.pathConstraints, new GoalEndState(0, endPose.getRotation(), true));
+        path.preventFlipping = true;
+
+        return AutoBuilder.pathfindThenFollowPath(path, Constants.pathConstraints);
     }
 
     private void setupShuffleboard(Field2d field) {

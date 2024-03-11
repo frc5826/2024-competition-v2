@@ -9,6 +9,8 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.vision.AprilTagResult;
+import frc.robot.vision.RobotCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -16,9 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class VisionSubsystem extends SubsystemBase
-{
-
+public class VisionSubsystem extends LoggedSubsystem {
     //PhotonLib provides us a "PoseAmbiguity". According to their docs "Numbers above 0.2 are likely to be ambiguous".
     private static final double POSE_CUTOFF = 0.2;
 

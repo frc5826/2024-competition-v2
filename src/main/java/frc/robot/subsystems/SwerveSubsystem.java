@@ -20,7 +20,7 @@ import swervelib.parser.SwerveParser;
 
 import java.io.File;
 
-public class SwerveSubsystem extends SubsystemBase {
+public class SwerveSubsystem extends LoggedSubsystem {
     private final SwerveDrive swerveDrive;
 
     public double maximumSpeed = Constants.maxVelocity;

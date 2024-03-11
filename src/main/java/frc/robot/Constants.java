@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,16 +23,12 @@ public final class Constants
 {
     public static final int rotateMotor1ID = 10;
     public static final int rotateMotor2ID = 11;
-    public static final int extendMotorID = 14;
-    public static final int ankleMotorID = 12;
 
     public static final int shooterMotor1ID = 3;
     public static final int shooterMotor2ID = 6;
-    public static final int shooterControlMotorID = 30;
+    public static final int intakeID = 30;
 
     public static final int rotateEncoderID = 0;
-    public static final int extendEncoderID = 1;
-    public static final int ankleEncoderID = 2;
 
     public static final int beamBreakID = 3;
 
@@ -41,29 +38,23 @@ public final class Constants
     public static final double cRotateMax = 1;
     public static final double cRotateMin = -1;
     public static final double cRotateDeadband = 0;
-    public static final double cExtendP = 3.5;
-    public static final double cExtendI = 0.2;
-    public static final double cExtendD = 0.1;
-    public static final double cExtendMax = 1;
-    public static final double cExtendMin = -1;
-    public static final double cExtendDeadband = 0;
-
-    public static final double cWristP = 4;
-    public static final double cWristI = 0.1;
-    public static final double cWristD = 0;
-    public static final double cWristMax = 1;
-    public static final double cWristMin = -1;
-    public static final double cWristDeadband = 0;
 
     public static final double cDriveDeadband = 0.15;
     public static final double cTurnDeadband = 0.15;
 
+    //shooting constants
     public static final double cSpeakerTargetHeight = 0;
-    public static final double cMotorVeltoDistance = 100;
-    public static final double cMotorVeltoExitVel = 1;
+    public static final double heightCussion = .25;
+    public static final double averageArmHeight = .75;
 
     public static final PIDConstants cTurnPID = new PIDConstants(4.0, 0.01, 0.25);
     public static final PIDConstants cDrivePID = new PIDConstants(4.0, 0, 0.5);
+
+    public static final PathConstraints pathConstraints = new PathConstraints(
+            3.6, //TODO max this then tune PID
+            4.0,
+            2 * Math.PI,
+            2 * Math.PI);
 
     public static final double maxVelocity = 3.6; //doesn't make robot faster
     public static final Joystick buttonPanel = new Joystick(2);

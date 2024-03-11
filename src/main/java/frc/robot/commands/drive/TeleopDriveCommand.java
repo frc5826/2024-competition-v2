@@ -1,8 +1,9 @@
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.commands.LoggedCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.util.function.BooleanSupplier;
@@ -11,7 +12,7 @@ import java.util.function.DoubleSupplier;
 import static frc.robot.Constants.cDriveDeadband;
 import static frc.robot.Constants.cTurnDeadband;
 
-public class TeleopDriveCommand extends Command {
+public class TeleopDriveCommand extends LoggedCommand {
 
     private final SwerveSubsystem swerveSubsystem;
 
