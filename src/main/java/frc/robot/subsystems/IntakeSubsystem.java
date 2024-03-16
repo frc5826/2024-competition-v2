@@ -2,16 +2,17 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 import static frc.robot.Constants.*;
 
 public class IntakeSubsystem extends LoggedSubsystem {
 
     CANSparkMax intakeMotor;
 
-    DigitalInput beamBreak;
+    DigitalInput beamBreakIntake;
+    DigitalInput beamBreakShooter;
 
     boolean hasRing;
 
@@ -20,15 +21,20 @@ public class IntakeSubsystem extends LoggedSubsystem {
         intakeMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
         intakeMotor.setInverted(false);
 
-        beamBreak = new DigitalInput(beamBreakID);
+        beamBreakIntake = new DigitalInput(intakeBeamBreak);
+        beamBreakShooter = new DigitalInput(shooterBeamBreak);
     }
 
     public void setIntakeMotor(double speed) {
         intakeMotor.set(speed);
     }
 
-    public boolean getBeamBreak(){
-        return beamBreak.get();
+    public boolean getBeamBreakIntake(){
+        return beamBreakIntake.get();
+    }
+
+    public boolean getBeamBreakShooter(){
+        return beamBreakShooter.get();
     }
 
     public void setHasRing(boolean hasRing) {

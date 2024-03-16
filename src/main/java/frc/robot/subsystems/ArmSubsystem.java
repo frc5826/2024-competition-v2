@@ -80,7 +80,23 @@ public class ArmSubsystem extends LoggedSubsystem {
     }
 
     public double getRotation(){
-        return rotateEncoder.get();
+        return rotateEncoder.getAbsolutePosition() - armOffset;
+    }
+
+    private double getDifference(double rotation) {
+        rotation -= 0.5;
+
+        if (rotation < 0.5) {
+            rotation++;
+        } else if (rotation > 0.5) {
+            rotation--;
+        }
+
+        return rotation;
+    }
+
+    public double getRotationDegrees(){
+        return rotateEncoder.get() * 360;
     }
 
     public double getRotationAbsolute(){

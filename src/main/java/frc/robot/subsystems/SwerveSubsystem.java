@@ -17,6 +17,7 @@ import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
+import swervelib.telemetry.SwerveDriveTelemetry;
 
 import java.io.File;
 
@@ -41,6 +42,8 @@ public class SwerveSubsystem extends LoggedSubsystem {
             throw new RuntimeException(e);
         }
         swerveDrive.setHeadingCorrection(false);
+
+        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
     }
 
 

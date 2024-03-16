@@ -21,16 +21,21 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public final class Constants
 {
-    public static final int rotateMotor1ID = 10;
-    public static final int rotateMotor2ID = 11;
 
-    public static final int shooterMotor1ID = 3;
-    public static final int shooterMotor2ID = 6;
-    public static final int intakeID = 30;
+    public static final int climberLeftID = 10;
+    public static final int climberRightID = 9;
+    public static final int rotateMotor1ID = 11;
+    public static final int rotateMotor2ID = 12;
+    public static final double armOffset = 0.5;
 
-    public static final int rotateEncoderID = 0;
+    public static final int shooterMotor1ID = 13;
+    public static final int shooterMotor2ID = 14;
+    public static final int intakeID = 15;
 
-    public static final int beamBreakID = 3;
+    public static final int rotateEncoderID = 3;
+
+    public static final int intakeBeamBreak = 1;
+    public static final int shooterBeamBreak = 2;
 
     public static final double cRotateP = 4.5;
     public static final double cRotateI = 1;

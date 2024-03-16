@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.Constants.*;
 
 public class ClimberSubsystem extends LoggedSubsystem {
     private CANSparkMax motor1, motor2;
@@ -15,8 +16,8 @@ public class ClimberSubsystem extends LoggedSubsystem {
 
         ShuffleboardTab tab = Shuffleboard.getTab("CLIMBER");
 
-        motor1 = new CANSparkMax(9, CANSparkLowLevel.MotorType.kBrushless);
-        motor2 = new CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless);
+        motor1 = new CANSparkMax(climberLeftID, CANSparkLowLevel.MotorType.kBrushless);
+        motor2 = new CANSparkMax(climberRightID, CANSparkLowLevel.MotorType.kBrushless);
         motor1.setInverted(false);
         motor2.setInverted(true);
         limitswitch1 = new DigitalInput(4);

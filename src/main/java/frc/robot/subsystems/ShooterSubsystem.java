@@ -13,7 +13,6 @@ import static frc.robot.Constants.*;
 
 public class ShooterSubsystem extends LoggedSubsystem {
 
-    SimpleWidget inp1, inp2, bothInput;
     CANSparkMax shooterMotor1, shooterMotor2;
 
     private boolean hasRing;
@@ -61,14 +60,6 @@ public class ShooterSubsystem extends LoggedSubsystem {
 
     @Override
     public void periodic() {
-        super.periodic();
-        if (bothInput.getEntry().getDouble(0) == 0) {
-            shooterMotor1.getPIDController().setReference(inp1.getEntry().getDouble(0), CANSparkBase.ControlType.kVelocity);
-            shooterMotor2.getPIDController().setReference(inp2.getEntry().getDouble(0), CANSparkBase.ControlType.kVelocity);
-        } else {
-            shooterMotor1.getPIDController().setReference(-bothInput.getEntry().getDouble(0), CANSparkBase.ControlType.kVelocity);
-            shooterMotor2.getPIDController().setReference(bothInput.getEntry().getDouble(0), CANSparkBase.ControlType.kVelocity);
-        }
 
     }
 
