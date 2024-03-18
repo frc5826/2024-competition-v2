@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.math.PID;
 
 import static frc.robot.Constants.*;
@@ -21,6 +23,8 @@ public class ArmSubsystem extends LoggedSubsystem {
     private PID rotatePID;
 
     private double desiredArmRotations;
+
+    private SimpleWidget speed;
 
     public ArmSubsystem() {
         rotateMotor = new CANSparkMax(rotateMotor1ID, CANSparkLowLevel.MotorType.kBrushless);
@@ -52,13 +56,27 @@ public class ArmSubsystem extends LoggedSubsystem {
         tab.addNumber("Rotation", this::getRotation);
         tab.addNumber("Absolute Rotation", this::getRotationAbsolute);
         tab.addNumber("Arm Desired Rotation", () -> desiredArmRotations);
+
+        speed = tab.add("speed", 0);
+
+        tab.add("pid", rotatePID);
+
+
     }
 
     @Override
     public void periodic() {
-        rotatePID.setGoal(desiredArmRotations);
+        //rotatePID.setGoal(desiredArmRotations);
 
-        setRotateSpeed(clamp(rotatePID.calculate(), -0.8, 0.8));
+        double rotate = rotatePID.calculate();
+
+        if (Math.abs(rotatePID.getError()) > Math.sin(getDesiredArmRotations() * Math.PI * 2) * armDeadband) {
+            setRotateSpeed(clamp(rotate + Math.cos(desiredArmRotations * Math.PI * 2) * gravityConstant, -1, 1));
+        } else {
+            setRotateSpeed(gravityConstant * Math.sin(getDesiredArmRotations() * Math.PI * 2));
+        }
+
+        //setRotateSpeed(speed.getEntry().getDouble(0));
     }
 
     private double clamp(double input, double bound1, double bound2){
@@ -72,7 +90,7 @@ public class ArmSubsystem extends LoggedSubsystem {
     }
 
     public void setArmHome(){
-        desiredArmRotations = 0.1439;
+        desiredArmRotations = 0;
     }
 
     public void setRotateSpeed(double speed){
@@ -80,7 +98,7 @@ public class ArmSubsystem extends LoggedSubsystem {
     }
 
     public double getRotation(){
-        return rotateEncoder.getAbsolutePosition() - armOffset;
+        return -rotateEncoder.getAbsolutePosition() + armOffset;
     }
 
     private double getDifference(double rotation) {

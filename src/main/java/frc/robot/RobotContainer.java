@@ -8,6 +8,8 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.*;
 
@@ -50,6 +52,8 @@ public class RobotContainer
 
     private void setupXboxBindings() {
 
+        new Trigger(xbox::getBackButton).and(xbox::getStartButton).debounce(1)
+                .onTrue(new InstantCommand(() -> { swerveSubsystem.zeroGyro(); }));
     }
 
     private void setupButtonBoardBindings() {

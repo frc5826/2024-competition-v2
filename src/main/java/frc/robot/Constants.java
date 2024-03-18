@@ -26,7 +26,7 @@ public final class Constants
     public static final int climberRightID = 9;
     public static final int rotateMotor1ID = 11;
     public static final int rotateMotor2ID = 12;
-    public static final double armOffset = 0.5;
+    public static final double armOffset = 0.632;
 
     public static final int shooterMotor1ID = 13;
     public static final int shooterMotor2ID = 14;
@@ -37,15 +37,18 @@ public final class Constants
     public static final int intakeBeamBreak = 1;
     public static final int shooterBeamBreak = 2;
 
-    public static final double cRotateP = 4.5;
-    public static final double cRotateI = 1;
-    public static final double cRotateD = 0.2;
+    public static final double cRotateP = 10;
+    public static final double cRotateI = 0;
+    public static final double cRotateD = 0.4;
     public static final double cRotateMax = 1;
     public static final double cRotateMin = -1;
-    public static final double cRotateDeadband = 0;
+    public static final double cRotateDeadband = 0.0;
+    public static final double armDeadband = 0.01;
 
     public static final double cDriveDeadband = 0.15;
     public static final double cTurnDeadband = 0.15;
+
+    public static final double gravityConstant = 0.0275;
 
     //shooting constants
     public static final double cSpeakerTargetHeight = 0;

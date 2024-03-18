@@ -72,6 +72,8 @@ public class PID implements NTSendable {
         }
     }
 
+    public double getGoal() {return setpoint;}
+
     public double getError() {
         return error;
     }
@@ -81,11 +83,11 @@ public class PID implements NTSendable {
     }
 
     public double getI() {
-        return P;
+        return I;
     }
 
     public double getD() {
-        return P;
+        return D;
     }
 
     private void setP(double P) {
@@ -121,5 +123,7 @@ public class PID implements NTSendable {
         builder.addDoubleProperty("I",this::getI,this::setI);
         builder.addDoubleProperty("D",this::getD,this::setD);
         builder.addDoubleProperty("error", this::getError,null);
+        builder.addDoubleProperty("goal", this::getGoal, this::setGoal);
+        builder.addDoubleProperty("output", this::getOutput, null);
     }
 }
