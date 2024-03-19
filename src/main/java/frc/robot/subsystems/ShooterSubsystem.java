@@ -21,14 +21,14 @@ public class ShooterSubsystem extends LoggedSubsystem {
         shooterMotor1 = new CANSparkMax(shooterMotor1ID, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotor2 = new CANSparkMax(shooterMotor2ID, CANSparkLowLevel.MotorType.kBrushless);
 
+        shooterMotor1.restoreFactoryDefaults();
+        shooterMotor2.restoreFactoryDefaults();
+
         shooterMotor1.setIdleMode(CANSparkBase.IdleMode.kBrake);
         shooterMotor2.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-        shooterMotor1.setInverted(false);
+        shooterMotor1.setInverted(true);
         shooterMotor2.setInverted(false);
-
-        shooterMotor1.restoreFactoryDefaults();
-        shooterMotor2.restoreFactoryDefaults();
 
         shooterMotor1.getPIDController().setP(24e-5);
         shooterMotor2.getPIDController().setP(24e-5);

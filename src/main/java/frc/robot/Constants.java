@@ -22,6 +22,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public final class Constants
 {
 
+    public static final double ampArmAngle = 60;
+    public static final double intakeArmAngle = -6.5;
+    public static final double homeArmAngle = 0;
+    public static final double shootArmAngle = 48;
+    //public static final double shootArmAngle = 70;
+
+    public static final double maxShooterRPM = 5500;
+
+    public static final double armErrorTolerance = 0.01;
+
     public static final int climberLeftID = 10;
     public static final int climberRightID = 9;
     public static final int rotateMotor1ID = 11;
@@ -29,15 +39,15 @@ public final class Constants
     public static final double armOffset = 0.632;
 
     public static final int shooterMotor1ID = 13;
-    public static final int shooterMotor2ID = 14;
-    public static final int intakeID = 15;
+    public static final int shooterMotor2ID = 15;
+    public static final int intakeID = 14;
 
     public static final int rotateEncoderID = 3;
 
     public static final int intakeBeamBreak = 1;
     public static final int shooterBeamBreak = 2;
 
-    public static final double cRotateP = 10;
+    public static final double cRotateP = 6;
     public static final double cRotateI = 0;
     public static final double cRotateD = 0.4;
     public static final double cRotateMax = 1;

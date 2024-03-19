@@ -66,15 +66,17 @@ public class ArmSubsystem extends LoggedSubsystem {
 
     @Override
     public void periodic() {
-        //rotatePID.setGoal(desiredArmRotations);
+        rotatePID.setGoal(desiredArmRotations);
 
         double rotate = rotatePID.calculate();
 
-        if (Math.abs(rotatePID.getError()) > Math.sin(getDesiredArmRotations() * Math.PI * 2) * armDeadband) {
-            setRotateSpeed(clamp(rotate + Math.cos(desiredArmRotations * Math.PI * 2) * gravityConstant, -1, 1));
-        } else {
-            setRotateSpeed(gravityConstant * Math.sin(getDesiredArmRotations() * Math.PI * 2));
-        }
+//        if (Math.abs(rotatePID.getError()) > Math.sin(getDesiredArmRotations() * Math.PI * 2) * armDeadband) {
+//            setRotateSpeed(clamp(rotate + Math.cos(desiredArmRotations * Math.PI * 2) * gravityConstant, -1, 1));
+//        } else {
+//            setRotateSpeed(gravityConstant * Math.sin(getDesiredArmRotations() * Math.PI * 2));
+//        }
+
+        setRotateSpeed(clamp(rotate + Math.cos(desiredArmRotations * Math.PI * 2) * gravityConstant, -1, 1));
 
         //setRotateSpeed(speed.getEntry().getDouble(0));
     }
@@ -84,9 +86,9 @@ public class ArmSubsystem extends LoggedSubsystem {
         return Math.max(Math.min(input, bound1), bound2);
     }
 
-    public void setDesiredArmAngle(double armAngleRAD){
-        double clampedAngle = clamp(armAngleRAD, 0, Math.toRadians(110));
-        desiredArmRotations = (0.161 * clampedAngle) + 0.143;
+    public void setDesiredArmAngle(double armAngleDegrees){
+        double clampedAngle = clamp(armAngleDegrees, -7, 110);
+        desiredArmRotations = clampedAngle / 360;
     }
 
     public void setArmHome(){
@@ -111,6 +113,10 @@ public class ArmSubsystem extends LoggedSubsystem {
         }
 
         return rotation;
+    }
+
+    public double getPIDError() {
+        return rotatePID.getError();
     }
 
     public double getRotationDegrees(){

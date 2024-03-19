@@ -7,10 +7,17 @@ package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.arm.ArmCommand;
 import frc.robot.commands.drive.TeleopDriveCommand;
+import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.commands.intake.IntakeCommandGroup;
+import frc.robot.commands.shoot.ShootCommand;
 import frc.robot.subsystems.*;
 
 import java.io.File;
@@ -52,12 +59,23 @@ public class RobotContainer
 
     private void setupXboxBindings() {
 
+        new Trigger(xbox::getAButtonPressed).onTrue(new IntakeCommandGroup(intakeSubsystem, armSubsystem));
+
         new Trigger(xbox::getBackButton).and(xbox::getStartButton).debounce(1)
-                .onTrue(new InstantCommand(() -> { swerveSubsystem.zeroGyro(); }));
+                .whileTrue(new RunCommand(() -> {
+                    swerveSubsystem.zeroGyro();
+                    xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
+                }).finallyDo(() -> xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0)));
     }
 
     private void setupButtonBoardBindings() {
-
+        panelButtons[5].onTrue(new ArmCommand(armSubsystem, intakeArmAngle));
+        panelButtons[9].onTrue(new ArmCommand(armSubsystem, ampArmAngle)); //TODO command group that brings note back farther
+        panelButtons[10].onTrue(new ArmCommand(armSubsystem, homeArmAngle));
+        panelButtons[8].whileTrue(new IntakeCommand(intakeSubsystem, 0.2));
+        panelButtons[7].onTrue(new ArmCommand(armSubsystem, shootArmAngle));
+        panelButtons[11].onTrue(new ShootCommand(shooterSubsystem, intakeSubsystem));
+        //panelButtons[11].onTrue(new RunCommand(() -> shooterSubsystem.setShooterSpeed(500)));
     }
 
 //    public Command getAutonomousCommand()
