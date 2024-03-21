@@ -27,20 +27,23 @@ public class ShooterSubsystem extends LoggedSubsystem {
         shooterMotor1.setIdleMode(CANSparkBase.IdleMode.kBrake);
         shooterMotor2.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
+//        shooterMotor1.setOpenLoopRampRate(0);
+//        shooterMotor2.setOpenLoopRampRate(0);
+
         shooterMotor1.setInverted(true);
         shooterMotor2.setInverted(false);
 
-        shooterMotor1.getPIDController().setP(24e-5);
-        shooterMotor2.getPIDController().setP(24e-5);
+        shooterMotor1.getPIDController().setP(0.0005);
+        shooterMotor2.getPIDController().setP(0.0005);
 
         shooterMotor1.getPIDController().setI(1e-6);
         shooterMotor2.getPIDController().setI(1e-6);
 
-        shooterMotor1.getPIDController().setD(4e-6);
-        shooterMotor2.getPIDController().setD(4e-6);
+        shooterMotor1.getPIDController().setD(2e-6);
+        shooterMotor2.getPIDController().setD(2e-6);
 
-        shooterMotor1.getPIDController().setFF(30e-6);
-        shooterMotor2.getPIDController().setFF(30e-6);
+        shooterMotor1.getPIDController().setFF(0);
+        shooterMotor2.getPIDController().setFF(0);
 
         shooterMotor1.getPIDController().setIZone(0);
         shooterMotor2.getPIDController().setIZone(0);

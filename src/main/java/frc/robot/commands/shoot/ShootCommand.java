@@ -5,10 +5,15 @@ import frc.robot.commands.LoggedCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
+import java.time.Duration;
+import java.time.Instant;
+
 public class ShootCommand extends LoggedCommand {
 
     private ShooterSubsystem shooterSubsystem;
     private IntakeSubsystem intakeSubsystem;
+
+    private Instant initInstant;
 
     public ShootCommand(ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem) {
         this.shooterSubsystem = shooterSubsystem;
@@ -18,13 +23,27 @@ public class ShootCommand extends LoggedCommand {
     }
 
     @Override
+    public void initialize() {
+        super.initialize();
+        initInstant = Instant.now();
+    }
+
+    @Override
     public void execute() {
         super.execute();
         shooterSubsystem.setShooterSpeed(Constants.maxShooterRPM);
         double difference1 = Math.abs(shooterSubsystem.getShooterMotor1Speed() - Constants.maxShooterRPM);
         double difference2 = Math.abs(shooterSubsystem.getShooterMotor2Speed() - Constants.maxShooterRPM);
 
-        if (difference1 < 300 && difference2 < 300) {
+        boolean toleranceMet = difference1 < Constants.shooterTolerance && difference2 < Constants.shooterTolerance;
+        //If something happens and we can't spin the motors up, we still want to try shooting after some point.
+        boolean timeElapsed = initInstant != null && Duration.between(initInstant, Instant.now()).abs().getSeconds() > 3;
+
+        if(timeElapsed){
+            System.out.println("WARNING - Time Elapsed on Shooters");
+        }
+
+        if (toleranceMet || timeElapsed) {
             intakeSubsystem.setIntakeMotor(-1);
         }
     }
@@ -37,7 +56,8 @@ public class ShootCommand extends LoggedCommand {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        shooterSubsystem.setShooterSpeed(0);
+        shooterSubsystem.setShooterOutput(0);
         intakeSubsystem.setIntakeMotor(0);
+        initInstant = null;
     }
 }

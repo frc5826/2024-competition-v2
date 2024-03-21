@@ -26,9 +26,14 @@ public final class Constants
     public static final double intakeArmAngle = -6.5;
     public static final double homeArmAngle = 0;
     public static final double shootArmAngle = 48;
+    public static final double climbArmAngle = 110;
     //public static final double shootArmAngle = 70;
 
-    public static final double maxShooterRPM = 5500;
+    public static final double maxShooterRPM = 5000;
+    public static final double shooterTolerance = maxShooterRPM * 0.05;
+
+    public static final double climbUpPower = -0.3;
+    public static final double climbDownPower = 0.3;
 
     public static final double armErrorTolerance = 0.01;
 
