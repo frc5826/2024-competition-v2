@@ -22,11 +22,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public final class Constants
 {
 
-    public static final double ampArmAngle = 60;
+    public static final double ampArmAngle = 55;
     public static final double intakeArmAngle = -6.5;
     public static final double homeArmAngle = -6.5;
     public static final double shootArmAngle = 48;
-    public static final double climbArmAngle = 110;
+    public static final double climbArmAngle = 90;
     //public static final double shootArmAngle = 70;
 
     public static final double maxShooterRPM = 5000;

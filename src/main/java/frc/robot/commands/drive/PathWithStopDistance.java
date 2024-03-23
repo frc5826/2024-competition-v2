@@ -11,17 +11,14 @@ public class PathWithStopDistance extends LoggedCommand {
     private LocalizationSubsystem localizationSubsystem;
     private Pose2d ringPose;
     private double stopDistance;
-    private boolean speakerDrive;
 
     private Command buildCommand;
-    public PathWithStopDistance(LocalizationSubsystem localizationSubsystem, Pose2d ringPose, double stopDistance, boolean speakerDrive) {
+    public PathWithStopDistance(LocalizationSubsystem localizationSubsystem, Pose2d ringPose, double stopDistance) {
         this.localizationSubsystem = localizationSubsystem;
 
         this.ringPose = ringPose;
 
         this.stopDistance = stopDistance;
-
-        this.speakerDrive = speakerDrive;
     }
 
     @Override
@@ -35,14 +32,8 @@ public class PathWithStopDistance extends LoggedCommand {
     @Override
     public void execute() {
         buildCommand.execute();
-        double angleChange;
-        if (speakerDrive) {
-            angleChange = Math.PI;
-        } else {
-            angleChange = 0;
-        }
         localizationSubsystem.setRotationTarget(ringPose.getTranslation()
-                .minus(localizationSubsystem.getCurrentPose().getTranslation()).getAngle().minus(Rotation2d.fromRadians(angleChange)));
+                .minus(localizationSubsystem.getCurrentPose().getTranslation()).getAngle());
     }
 
     @Override

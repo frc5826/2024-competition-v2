@@ -63,12 +63,13 @@ public class AutoPickupRing extends LoggedCommand {
 
     private double ringYaw() {
         //System.out.println(ringTracking.getFieldPose().minus(localizationSubsystem.getCurrentPose().getTranslation()).rotateBy(localizationSubsystem.getCurrentPose().getRotation().unaryMinus()).getAngle().getRadians());
-        return ringTracking.getFieldPose().minus(localizationSubsystem.getCurrentPose().getTranslation()).rotateBy(localizationSubsystem.getCurrentPose().getRotation().times(-1)).getAngle().getRadians() * -1;
+        //return ringTracking.getFieldPose().minus(localizationSubsystem.getCurrentPose().getTranslation()).rotateBy(localizationSubsystem.getCurrentPose().getRotation().times(-1)).getAngle().getRadians() * -1;
+        return ringTracking.getYaw();
     }
 
     private double ringDistance() {
-        //return ringTracking.getDistance();
-        return ringTracking.getFieldPose().getDistance(localizationSubsystem.getCurrentPose().getTranslation()) - stopDistance;
+        return ringTracking.getDistance();
+        //return ringTracking.getFieldPose().getDistance(localizationSubsystem.getCurrentPose().getTranslation()) - stopDistance;
     }
 
     @Override

@@ -32,7 +32,8 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
                 ),
                 Commands.parallel(
                         new ArmCommand(armSubsystem, 10),
-                        new IntakeCommand(intakeSubsystem, -0.5).until(intakeSubsystem::getBeamBreakShooter)
+                        new IntakeCommand(intakeSubsystem, -0.5).until(intakeSubsystem::getBeamBreakShooter),
+                        new RunCommand(() -> intakeSubsystem.setHasRing(true))
                 ),
                 new InstantCommand(() -> {
                     xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);

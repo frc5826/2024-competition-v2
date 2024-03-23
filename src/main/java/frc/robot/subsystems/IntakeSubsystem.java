@@ -30,6 +30,7 @@ public class IntakeSubsystem extends LoggedSubsystem {
 
         tab.addBoolean("intake beam break", this::getBeamBreakIntake);
         tab.addBoolean("shooter beam break", this::getBeamBreakShooter);
+        tab.addBoolean("has ring", this::hasRing);
     }
 
     public void setIntakeMotor(double speed) {

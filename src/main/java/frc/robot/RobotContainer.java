@@ -76,8 +76,8 @@ public class RobotContainer
         panelButtons[4].whileTrue(new IntakeSecondHalfCommandGroup(intakeSubsystem, shooterSubsystem));
         panelButtons[5].onTrue(new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem));
         panelButtons[7].onTrue(new ArmCommand(armSubsystem, shootArmAngle));
-        panelButtons[8].whileTrue(new IntakeCommand(intakeSubsystem, 0.5));
-        panelButtons[9].onTrue(new ArmCommand(armSubsystem, ampArmAngle)); //TODO command group that brings note back farther
+        panelButtons[8].whileTrue(new IntakeCommand(intakeSubsystem, 0.3).alongWith(new RunCommand(() -> intakeSubsystem.setHasRing(false))));
+        panelButtons[9].onTrue(new ArmCommand(armSubsystem, ampArmAngle));
         panelButtons[10].onTrue(new ArmCommand(armSubsystem, homeArmAngle));
         panelButtons[11].onTrue(new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem));
         //panelButtons[11].onTrue(new RunCommand(() -> shooterSubsystem.setShooterSpeed(500)));
