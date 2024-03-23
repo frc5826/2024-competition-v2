@@ -22,6 +22,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public final class Constants
 {
 
+    public static final double ringLeftOffset = 0;
+    public static final double ringRightOffset = 0;
+
     public static final double ampArmAngle = 55;
     public static final double intakeArmAngle = -6.5;
     public static final double homeArmAngle = -6.5;

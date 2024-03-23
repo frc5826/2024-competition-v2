@@ -54,9 +54,13 @@ public class LocalizationSubsystem extends LoggedSubsystem {
 
     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(5));
 
-    private List<RingResult> ringResults;
+    private List<RingResult> ringResultsLeft;
+    private List<RingResult> ringResultsRight;
 
     private RingResult bestFrontRing = RingResult.getEmpty();
+
+    private RingResult bestLeftRing = RingResult.getEmpty();
+    private RingResult bestRightRing = RingResult.getEmpty();
 
     public LocalizationSubsystem(VisionSubsystem visionSubsystem, SwerveSubsystem swerveSubsystem) {
         try {
@@ -121,9 +125,17 @@ public class LocalizationSubsystem extends LoggedSubsystem {
             System.err.println("Unable to localize. Field Layout not loaded.");
         }
         field.setRobotPose(getCurrentPose());
-        field.getObject("rings").setPose(new Pose2d(bestFrontRing.getFieldPose(), Rotation2d.fromDegrees(0)));
-        ringResults = getRingResults(visionSubsystem.getRings());
-        bestFrontRing = getBestPickupRing();
+        //field.getObject("rings").setPose(new Pose2d(bestFrontRing.getFieldPose(), Rotation2d.fromDegrees(0)));
+
+        ringResultsLeft = getRingResults(visionSubsystem.getRings(true), true);
+        ringResultsRight = getRingResults(visionSubsystem.getRings(false), false);
+
+        bestLeftRing = getBestPickupRing(ringResultsLeft);
+        bestRightRing = getBestPickupRing(ringResultsRight);
+
+        field.getObject("rings").setPoses(
+                new Pose2d(bestLeftRing.getFieldPose(), new Rotation2d()),
+                new Pose2d(bestRightRing.getFieldPose(), new Rotation2d()));
     }
 
     public void reset() {
@@ -223,35 +235,39 @@ public class LocalizationSubsystem extends LoggedSubsystem {
 
         ShuffleboardTab testTab = Shuffleboard.getTab("test tab");
 
-        testTab.addDouble("ring distance", () -> bestFrontRing.getDistance());
-        testTab.addDouble("ring yaw", () -> Math.toDegrees(bestFrontRing.getAngleToHeading()));
-        testTab.addDoubleArray("ring field pose", () -> new double[]{bestFrontRing.getFieldPose().getX(), bestFrontRing.getFieldPose().getY()});
+        testTab.addDouble("left ring distance", () -> bestLeftRing.getDistance());
+        testTab.addDouble("left ring yaw", () -> Math.toDegrees(bestLeftRing.getAngleToHeading()));
+        testTab.addDoubleArray("left ring field pose", () -> new double[]{bestLeftRing.getFieldPose().getX(), bestLeftRing.getFieldPose().getY()});
+
+        testTab.addDouble("right ring distance", () -> bestRightRing.getDistance());
+        testTab.addDouble("right ring yaw", () -> Math.toDegrees(bestRightRing.getAngleToHeading()));
+        testTab.addDoubleArray("right ring field pose", () -> new double[]{bestRightRing.getFieldPose().getX(), bestRightRing.getFieldPose().getY()});
     }
 
     public Pose2d getCurrentPose() {
         return poseEstimator.getEstimatedPosition();
     }
 
-    public List<RingResult> getRingResults(List<Pair<PhotonTrackedTarget, RobotCamera>> rings) {
+    public List<RingResult> getRingResults(Pair<RobotCamera, List<PhotonTrackedTarget>> rings, boolean isLeft) {
         List<RingResult> ringResults = new LinkedList<>();
 
-        for (Pair<PhotonTrackedTarget, RobotCamera> ring : rings) {
-            ringResults.add(new RingResult(ring.getSecond(),
-                    ring.getFirst().getYaw(),
-                    ring.getFirst().getPitch(),
-                    ring.getFirst().getArea(),
-                    getCurrentPose()));
+        for (PhotonTrackedTarget ring : rings.getSecond()) {
+            ringResults.add(new RingResult(rings.getFirst(),
+                    ring.getYaw(),
+                    ring.getPitch(),
+                    ring.getArea(),
+                    getCurrentPose(),
+                    isLeft));
         }
 
         return ringResults;
     }
 
-    public RingResult getBestPickupRing() {
+    public RingResult getBestPickupRing(List<RingResult> rings) {
         RingResult ring = RingResult.getEmpty();
 
-        for (RingResult ringResult : ringResults) {
-            if (ringResult.getCamera().equals(visionSubsystem.getFrontCamera()) &&
-                    ringResult.getDistance() < ring.getDistance()) {
+        for (RingResult ringResult : rings) {
+            if (ringResult.getDistance() < ring.getDistance()){
                 ring = ringResult;
             }
         }

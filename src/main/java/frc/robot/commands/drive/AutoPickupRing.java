@@ -38,7 +38,7 @@ public class AutoPickupRing extends LoggedCommand {
     @Override
     public void initialize() {
         die = false;
-        ringTracking = localizationSubsystem.getBestPickupRing();
+        ringTracking = RingResult.getEmpty(); // localizationSubsystem.getBestPickupRing();
         if (ringTracking.getFieldPose().equals(new Translation2d(0, 0))) {
             die = true;
         }
@@ -49,7 +49,7 @@ public class AutoPickupRing extends LoggedCommand {
 
     @Override
     public void execute() {
-        RingResult bestRing = localizationSubsystem.getBestPickupRing();
+        RingResult bestRing = RingResult.getEmpty(); // localizationSubsystem.getBestPickupRing();
         
 
         if (bestRing.getDistance() - previousRingDistance < epsilon) {

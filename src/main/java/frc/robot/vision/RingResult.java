@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.Constants;
 import frc.robot.math.RingMath;
 import org.photonvision.targeting.TargetCorner;
 
@@ -23,7 +24,10 @@ public class RingResult {
     private Pose2d robotPose;
     private Translation2d fieldPose;
 
-    public RingResult(RobotCamera camera, double yaw, double pitch, double area, Pose2d robotPose) {
+    private boolean isLeft;
+    private double offset;
+
+    public RingResult(RobotCamera camera, double yaw, double pitch, double area, Pose2d robotPose, boolean isLeft) {
         this.camera = camera;
 
         this.yaw = yaw;
@@ -31,6 +35,10 @@ public class RingResult {
         this.area = area;
 
         this.robotPose = robotPose;
+
+        this.isLeft = isLeft;
+
+        offset = isLeft ? Constants.ringLeftOffset : Constants.ringRightOffset;
 
         Transform3d camLocation = camera.getCameraPostion();
         double x = Math.cos(camLocation.getRotation().getZ()) * camLocation.getX() - Math.sin(camLocation.getRotation().getZ()) * camLocation.getY();
@@ -47,7 +55,7 @@ public class RingResult {
 
         fieldPose = robotPose.getTranslation()
                 .plus(new Translation2d(d, Rotation2d.fromRadians(-robotYaw + robotPose.getRotation().getRadians()))
-                        .plus(new Translation2d(.178 - .05, robotPose.getRotation()
+                        .plus(new Translation2d(offset, robotPose.getRotation()
                                 .plus(Rotation2d.fromDegrees(90)))));
     }
 

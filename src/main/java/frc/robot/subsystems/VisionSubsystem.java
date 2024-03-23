@@ -9,7 +9,9 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.math.RingMath;
 import frc.robot.vision.AprilTagResult;
+import frc.robot.vision.RingResult;
 import frc.robot.vision.RobotCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -24,18 +26,27 @@ public class VisionSubsystem extends LoggedSubsystem {
 
     private final List<RobotCamera> cameras;
 
-    private RobotCamera frontCamera;
-
     public VisionSubsystem() {
-        frontCamera = new RobotCamera(new Translation3d(.3225,-.28,.225), new Rotation3d(0,0,0), "beta-3000", false);
 
         cameras = List.of(
-                new RobotCamera(new Translation3d(.2425, -.3075,.27), new Rotation3d(Math.PI,Math.PI / 12,0), "beta-studio", true),
-                frontCamera,
-                new RobotCamera(new Translation3d(.3025,.2575,.27), new Rotation3d(Math.PI,Math.PI / 12, Math.PI), "gamma-studio", true),
-                new RobotCamera(new Translation3d(-.3225,.3075,.225), new Rotation3d(0,0,Math.PI), "gamma-3000", false)
+                new RobotCamera(new Translation3d(inToMeters(2),inToMeters(-9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12,0), "beta-studio", true),
+                new RobotCamera(new Translation3d(inToMeters(1),inToMeters(-13),inToMeters(21.5)), new Rotation3d(0,-Math.PI / 6,0), "beta-3000", false),
+                new RobotCamera(new Translation3d(inToMeters(-2),inToMeters(9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12, 0), "gamma-studio", true),
+                new RobotCamera(new Translation3d(inToMeters(1),inToMeters(13),inToMeters(21.5)), new Rotation3d(0,-Math.PI / 6, 0), "gamma-3000", false)
         );
 
+    }
+
+    public RobotCamera getBeta3000() {
+        return cameras.get(1);
+    }
+
+    public RobotCamera getGamma3000() {
+        return cameras.get(3);
+    }
+
+    private double inToMeters(double in) {
+        return in / 39.37;
     }
 
 
@@ -78,8 +89,21 @@ public class VisionSubsystem extends LoggedSubsystem {
         return targets;
     }
 
-    public RobotCamera getFrontCamera() {
-        return frontCamera;
+    public Pair<RobotCamera, List<PhotonTrackedTarget>> getRings(boolean isLeft) {
+        List<PhotonTrackedTarget> targets = new LinkedList<>();
+
+        RobotCamera camera = isLeft ? cameras.get(3) : cameras.get(1);
+
+        if (!camera.isAprilTag()) {
+            PhotonPipelineResult result = camera.getCamera().getLatestResult();
+            if (result.hasTargets()) {
+                for (PhotonTrackedTarget target : result.getTargets()) {
+                    targets.add(target);
+                }
+            }
+        }
+
+        return new Pair<>(camera, targets);
     }
 
 }
