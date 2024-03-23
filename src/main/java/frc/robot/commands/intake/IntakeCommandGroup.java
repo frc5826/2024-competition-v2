@@ -1,15 +1,17 @@
 package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.arm.ArmCommand;
 import frc.robot.commands.shoot.ShootCommand;
 import frc.robot.commands.shoot.ShooterCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+
+import static frc.robot.Constants.*;
 
 public class IntakeCommandGroup extends SequentialCommandGroup {
 
@@ -32,10 +34,12 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
                         new ArmCommand(armSubsystem, 10),
                         new IntakeCommand(intakeSubsystem, -0.5).until(intakeSubsystem::getBeamBreakShooter)
                 ),
-                Commands.parallel(
-                        new IntakeCommand(intakeSubsystem, 0.1),
-                        new ShooterCommand(shooterSubsystem, -0.1)
-                ).onlyWhile(intakeSubsystem::getBeamBreakShooter)
+                new InstantCommand(() -> {
+                    xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
+                }),
+                new WaitCommand(0.25).finallyDo(() -> {
+                    xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.0);
+                })
         );
     }
 

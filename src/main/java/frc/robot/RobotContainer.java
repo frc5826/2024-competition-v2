@@ -18,6 +18,7 @@ import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.IntakeCommandGroup;
 import frc.robot.commands.intake.IntakeSecondHalfCommandGroup;
 import frc.robot.commands.shoot.ShootCommand;
+import frc.robot.commands.shoot.ShootSpeakerCommandGroup;
 import frc.robot.subsystems.*;
 
 import java.io.File;
@@ -78,7 +79,7 @@ public class RobotContainer
         panelButtons[8].whileTrue(new IntakeCommand(intakeSubsystem, 0.5));
         panelButtons[9].onTrue(new ArmCommand(armSubsystem, ampArmAngle)); //TODO command group that brings note back farther
         panelButtons[10].onTrue(new ArmCommand(armSubsystem, homeArmAngle));
-        panelButtons[11].onTrue(new ShootCommand(shooterSubsystem, intakeSubsystem));
+        panelButtons[11].onTrue(new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem));
         //panelButtons[11].onTrue(new RunCommand(() -> shooterSubsystem.setShooterSpeed(500)));
     }
 

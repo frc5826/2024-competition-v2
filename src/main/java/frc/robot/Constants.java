@@ -24,7 +24,7 @@ public final class Constants
 
     public static final double ampArmAngle = 60;
     public static final double intakeArmAngle = -6.5;
-    public static final double homeArmAngle = 0;
+    public static final double homeArmAngle = -6.5;
     public static final double shootArmAngle = 48;
     public static final double climbArmAngle = 110;
     //public static final double shootArmAngle = 70;
