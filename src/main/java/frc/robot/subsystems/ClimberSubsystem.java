@@ -20,8 +20,8 @@ public class ClimberSubsystem extends LoggedSubsystem {
         motor2 = new CANSparkMax(climberRightID, CANSparkLowLevel.MotorType.kBrushless);
         motor1.setInverted(false);
         motor2.setInverted(true);
-        limitswitch1 = new DigitalInput(4);
-        limitswitch2 = new DigitalInput(5);
+        limitswitch1 = new DigitalInput(5);
+        limitswitch2 = new DigitalInput(4);
 
         motor1.setSmartCurrentLimit(80);
         motor2.setSmartCurrentLimit(80);
@@ -39,10 +39,10 @@ public class ClimberSubsystem extends LoggedSubsystem {
     }
 
     public boolean getRightLimitSwitch(){
-        return limitswitch1.get();
+        return !limitswitch1.get();
     }
     public boolean getLeftLimitSwitch() {
-        return limitswitch2.get();
+        return !limitswitch2.get();
     }
 
 }

@@ -16,10 +16,9 @@ public class IntakeSecondHalfCommandGroup extends SequentialCommandGroup {
     public IntakeSecondHalfCommandGroup(IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
         this.shooterSubsystem = shooterSubsystem;
-        addRequirements(intakeSubsystem);
 
         addCommands(
-                new IntakeCommand(intakeSubsystem, -0.5).until(intakeSubsystem::getBeamBreakShooter),
+                new IntakeCommand(intakeSubsystem, -1).until(intakeSubsystem::getBeamBreakShooter),
                 Commands.parallel(
                         new IntakeCommand(intakeSubsystem, 0.1),
                         new ShooterCommand(shooterSubsystem, -0.1)

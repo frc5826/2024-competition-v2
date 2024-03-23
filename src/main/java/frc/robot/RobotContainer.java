@@ -52,7 +52,7 @@ public class RobotContainer
     {
         setupButtonBoardBindings();
         setupXboxBindings();
-        SignalLogger.start();
+        SignalLogger.enableAutoLogging(false);
 
         CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, teleopDriveCommand);
     }

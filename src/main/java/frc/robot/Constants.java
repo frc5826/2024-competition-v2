@@ -32,13 +32,13 @@ public final class Constants
     public static final double maxShooterRPM = 5000;
     public static final double shooterTolerance = maxShooterRPM * 0.05;
 
-    public static final double climbUpPower = -0.3;
-    public static final double climbDownPower = 0.3;
+    public static final double climbUpPower = 0.5;
+    public static final double climbDownPower = -1;
 
     public static final double armErrorTolerance = 0.01;
 
-    public static final int climberLeftID = 10;
-    public static final int climberRightID = 9;
+    public static final int climberLeftID = 9;
+    public static final int climberRightID = 10;
     public static final int rotateMotor1ID = 11;
     public static final int rotateMotor2ID = 12;
     public static final double armOffset = 0.632;
