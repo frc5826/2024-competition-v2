@@ -10,9 +10,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.math.ArmController;
 import frc.robot.math.PID;
 
-import static frc.robot.Constants.*;
+import static frc.robot.Constants.ArmConstants.*;
 
 public class ArmSubsystem extends LoggedSubsystem {
 
@@ -21,7 +22,7 @@ public class ArmSubsystem extends LoggedSubsystem {
     private DutyCycleEncoder rotateEncoder;
 
     private PID rotatePID;
-
+    private ArmController controller;
     private double desiredArmRotations;
 
     private SimpleWidget speed;
@@ -45,8 +46,10 @@ public class ArmSubsystem extends LoggedSubsystem {
 
         rotatePID = new PID(cRotateP, cRotateI, cRotateD, cRotateMax, cRotateMin, cRotateDeadband, this::getRotation);
 
-        setArmHome();
+        //TODO
+        controller = new ArmController(cRotateP, cRotateI, cRotateMax, cGravityConstant, cVelConstant, cMaxVel, cMaxAccel, this::getRotation);
 
+        setArmHome();
         setupArmTab();
     }
 
@@ -60,6 +63,7 @@ public class ArmSubsystem extends LoggedSubsystem {
         speed = tab.add("speed", 0);
 
         tab.add("pid", rotatePID);
+        tab.add("armController", controller);
 
 
     }
@@ -70,15 +74,9 @@ public class ArmSubsystem extends LoggedSubsystem {
 
         double rotate = rotatePID.calculate();
 
-//        if (Math.abs(rotatePID.getError()) > Math.sin(getDesiredArmRotations() * Math.PI * 2) * armDeadband) {
-//            setRotateSpeed(clamp(rotate + Math.cos(desiredArmRotations * Math.PI * 2) * gravityConstant, -1, 1));
-//        } else {
-//            setRotateSpeed(gravityConstant * Math.sin(getDesiredArmRotations() * Math.PI * 2));
-//        }
+        setRotateSpeed(clamp(rotate + Math.cos(desiredArmRotations * Math.PI * 2) * cGravityConstant, -1, 1));
 
-        setRotateSpeed(clamp(rotate + Math.cos(desiredArmRotations * Math.PI * 2) * gravityConstant, -1, 1));
-
-        //setRotateSpeed(speed.getEntry().getDouble(0));
+        //setRotateSpeed(controller.calculate());//TODO
     }
 
     private double clamp(double input, double bound1, double bound2){
@@ -89,6 +87,7 @@ public class ArmSubsystem extends LoggedSubsystem {
     public void setDesiredArmAngle(double armAngleDegrees){
         double clampedAngle = clamp(armAngleDegrees, -7, 110);
         desiredArmRotations = clampedAngle / 360;
+        controller.setGoal(desiredArmRotations);//TODO
     }
 
     public void setArmHome(){
