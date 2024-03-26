@@ -138,6 +138,14 @@ public class LocalizationSubsystem extends LoggedSubsystem {
                 new Pose2d(bestRightRing.getFieldPose(), new Rotation2d()));
     }
 
+    public RingResult getBestLeftRing() {
+        return bestLeftRing;
+    }
+
+    public RingResult getBestRightRing() {
+        return bestRightRing;
+    }
+
     public void reset() {
         poseEstimator.resetPosition(
                 swerveSubsystem.getGyroRotation(),
