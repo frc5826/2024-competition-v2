@@ -62,6 +62,7 @@ public class RingResult {
     private RingResult() {
         fieldPose = new Translation2d();
         distance = Double.POSITIVE_INFINITY;
+        pitch = Double.POSITIVE_INFINITY;
     }
 
     private TargetCorner findBotRightCorner(List<TargetCorner> corners) {

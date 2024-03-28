@@ -29,21 +29,16 @@ public class VisionSubsystem extends LoggedSubsystem {
     public VisionSubsystem() {
 
         cameras = List.of(
-                new RobotCamera(new Translation3d(inToMeters(2),inToMeters(-9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12,0), "beta-studio", true),
-                new RobotCamera(new Translation3d(inToMeters(1),inToMeters(-13),inToMeters(21.5)), new Rotation3d(0,-Math.PI / 6,0), "beta-3000", false),
-                new RobotCamera(new Translation3d(inToMeters(-2),inToMeters(9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12, 0), "gamma-studio", true),
-                new RobotCamera(new Translation3d(inToMeters(1),inToMeters(13),inToMeters(21.5)), new Rotation3d(0,-Math.PI / 6, 0), "gamma-3000", false)
+//                new RobotCamera(new Translation3d(inToMeters(2),inToMeters(-9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12,0), "beta-studio-1", true),
+//                new RobotCamera(new Translation3d(inToMeters(1),inToMeters(-13),inToMeters(21.5)), new Rotation3d(0,-Math.PI / 6,0), "beta-studio-2", true),
+                //new RobotCamera(new Translation3d(inToMeters(-2),inToMeters(9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12, 0), "gamma-studio", true),
+                new RobotCamera(new Translation3d(inToMeters(1),inToMeters(13),inToMeters(21.5)), new Rotation3d(0,-Math.PI / 6, 0), "gamma-3000", false),
+                //new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "alpha-studio", true),
+                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "alpha-3000", false)
         );
 
     }
 
-    public RobotCamera getBeta3000() {
-        return cameras.get(1);
-    }
-
-    public RobotCamera getGamma3000() {
-        return cameras.get(3);
-    }
 
     private double inToMeters(double in) {
         return in / 39.37;
@@ -92,7 +87,7 @@ public class VisionSubsystem extends LoggedSubsystem {
     public Pair<RobotCamera, List<PhotonTrackedTarget>> getRings(boolean isLeft) {
         List<PhotonTrackedTarget> targets = new LinkedList<>();
 
-        RobotCamera camera = isLeft ? cameras.get(3) : cameras.get(1);
+        RobotCamera camera = isLeft ? cameras.get(0) : cameras.get(1);
 
         if (!camera.isAprilTag()) {
             PhotonPipelineResult result = camera.getCamera().getLatestResult();

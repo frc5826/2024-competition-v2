@@ -80,9 +80,9 @@ public final class Constants
     public static final double heightCussion = .25;
     public static final double averageArmHeight = .75;
 
-    public static final PIDConstants cTurnPID = new PIDConstants(4.0, 0.01, 0.25);
+    public static final PIDConstants cTurnPID = new PIDConstants(3.0, 0.01, 0.25);
     public static final PIDConstants cDrivePID = new PIDConstants(4.0, 0, 0.5);
-    public static final double trackRingVel = 2;
+    public static final double trackRingVel = 3;
 
     public static final PathConstraints pathConstraints = new PathConstraints(
             3.6, //TODO max this then tune PID

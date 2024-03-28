@@ -31,6 +31,8 @@ public class AutoDriveToRingCommand extends LoggedCommand {
 
     private Instant initialTime;
 
+    private double speed;
+
     public AutoDriveToRingCommand(LocalizationSubsystem localizationSubsystem, SwerveSubsystem swerveSubsystem,
                                   IntakeSubsystem intakeSubsystem, XboxControllerSubsystem xboxControllerSubsystem) {
         this.localizationSubsystem = localizationSubsystem;
@@ -48,9 +50,6 @@ public class AutoDriveToRingCommand extends LoggedCommand {
         leftTarget = localizationSubsystem.getBestLeftRing();
         rightTarget = localizationSubsystem.getBestRightRing();
 
-        seesRing = !leftTarget.getFieldPose().equals(new Translation2d(0, 0)) &&
-                !rightTarget.getFieldPose().equals(new Translation2d(0, 0));
-
         turnPID.setGoal(0);
 
         initialTime = Instant.now();
@@ -63,32 +62,43 @@ public class AutoDriveToRingCommand extends LoggedCommand {
         leftTarget = localizationSubsystem.getBestLeftRing();
         rightTarget = localizationSubsystem.getBestRightRing();
 
-        Double rumbleMs = getRumble();
-        if (rumbleMs == null) {
-            xboxControllerSubsystem.set(0);
+//        Double rumbleMs = getRumble();
+//        if (rumbleMs == null) {
+//            xboxControllerSubsystem.set(0);
+//        } else {
+//            xboxControllerSubsystem.set(rumbleMs.intValue());
+//        }
+
+        seesRing = !leftTarget.getFieldPose().equals(new Translation2d(0, 0)) ||
+                !rightTarget.getFieldPose().equals(new Translation2d(0, 0));
+
+        //System.out.println(turnPID.getError());
+
+        if (Math.min(leftTarget.getPitch(), rightTarget.getPitch()) < -5) {
+            speed = 1;
         } else {
-            xboxControllerSubsystem.set(rumbleMs.intValue());
+            speed = Constants.trackRingVel;
         }
 
-        swerveSubsystem.driveRobotOriented(new ChassisSpeeds(-Constants.trackRingVel, 0, turnPID.calculate()));
+        swerveSubsystem.driveRobotOriented(new ChassisSpeeds(speed, 0, turnPID.calculate()));
     }
 
     private double getAverageYaw() {
         double leftYaw = leftTarget.getYaw();
         double rightYaw = rightTarget.getYaw();
 
-        return (leftYaw + rightYaw) / 2;
+        return Math.toRadians((leftYaw + rightYaw) / 2);
     }
 
-    private Double getRumble() {
-        double area = Math.max(leftTarget.getArea(), rightTarget.getArea());
-
-        return area != 0 ? Math.min(50 / area, 1000)  : null;
-    }
+//    private Double getRumble() {
+//        double area = Math.max(leftTarget.getArea(), rightTarget.getArea());
+//
+//        return area != 0 ? Math.min(50 / area, 1000)  : null;
+//    }
 
     @Override
     public boolean isFinished() {
-        boolean noRing = !seesRing && (initialTime == null || Duration.between(initialTime, Instant.now()).abs().get(ChronoUnit.MILLIS) > 500);
+        boolean noRing = !seesRing;// && (initialTime == null || Duration.between(initialTime, Instant.now()).abs().get(ChronoUnit.MILLIS) > 500);
         boolean hasRing = intakeSubsystem.hasRing();
 
         return noRing || hasRing;
@@ -98,5 +108,7 @@ public class AutoDriveToRingCommand extends LoggedCommand {
     public void end(boolean interrupted) {
         super.end(interrupted);
         initialTime = null;
+
+        swerveSubsystem.driveRobotOriented(new ChassisSpeeds(0, 0, 0));
     }
 }

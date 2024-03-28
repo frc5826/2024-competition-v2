@@ -20,12 +20,11 @@ public class ShootSpeakerCommandGroup extends SequentialCommandGroup {
         addCommands(
                 Commands.parallel(
                         new IntakeCommand(intakeSubsystem, 0.1),
-                        new ShooterCommand(shooterSubsystem, -0.1),
-                        new TargetSpeakerCommand(armSubsystem, localizationSubsystem)
+                        new ShooterCommand(shooterSubsystem, -0.1)
+                        //new TargetSpeakerCommand(armSubsystem, localizationSubsystem)
                         //new TurnToCommand() TODO
                 ).onlyWhile(intakeSubsystem::getBeamBreakShooter),
-                new ShootCommand(shooterSubsystem, intakeSubsystem),
-                new RunCommand(() -> intakeSubsystem.setHasRing(false))
+                new ShootCommand(shooterSubsystem, intakeSubsystem)
         );
     }
 }

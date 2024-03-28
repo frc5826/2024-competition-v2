@@ -23,14 +23,15 @@ public class XboxControllerSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
-
-        if (Duration.between(lastPulse, Instant.now()).abs().get(ChronoUnit.MILLIS) >= pauseMs) {
-            Constants.xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0);
-            lastPause = Instant.now();
-        } else if (Duration.between(lastPause, Instant.now()).abs().get(ChronoUnit.MILLIS) >= pulseMs) {
-            Constants.xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
-            lastPulse = Instant.now();
-        }
+//        super.periodic();
+//
+//        if (Duration.between(lastPulse, Instant.now()).abs().get(ChronoUnit.MILLIS) >= pauseMs) {
+//            Constants.xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+//            lastPause = Instant.now();
+//        } else if (Duration.between(lastPause, Instant.now()).abs().get(ChronoUnit.MILLIS) >= pulseMs) {
+//            Constants.xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
+//            lastPulse = Instant.now();
+//        }
 
     }
 

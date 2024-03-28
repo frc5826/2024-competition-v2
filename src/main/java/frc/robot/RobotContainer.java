@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmCommand;
 import frc.robot.commands.climb.ClimberCommand;
+import frc.robot.commands.drive.AutoDriveToRingCommand;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.IntakeCommandGroup;
@@ -43,6 +44,7 @@ public class RobotContainer
     private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    private final XboxControllerSubsystem xboxControllerSubsystem = new XboxControllerSubsystem();
 
     private final TeensyLED teensyLED = new TeensyLED(0, 8, Color.kBlack);
 
@@ -64,7 +66,7 @@ public class RobotContainer
 
     private void setupXboxBindings() {
 
-        new Trigger(xbox::getAButtonPressed).onTrue(new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem));
+        new Trigger(xbox::getAButton).whileTrue(new AutoDriveToRingCommand(localizationSubsystem, swerveSubsystem, intakeSubsystem, xboxControllerSubsystem));
 
         new Trigger(xbox::getBackButton).and(xbox::getStartButton).debounce(1)
                 .whileTrue(new RunCommand(() -> {
@@ -81,7 +83,7 @@ public class RobotContainer
         panelButtons[4].whileTrue(new IntakeSecondHalfCommandGroup(intakeSubsystem, shooterSubsystem));
         panelButtons[5].onTrue(new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem));
         panelButtons[7].onTrue(new ArmCommand(armSubsystem, shootArmAngle));
-        panelButtons[8].whileTrue(new IntakeCommand(intakeSubsystem, 0.3).alongWith(new RunCommand(() -> intakeSubsystem.setHasRing(false))));
+        panelButtons[8].whileTrue(new IntakeCommand(intakeSubsystem, 0.3));
         panelButtons[9].onTrue(new ArmCommand(armSubsystem, ampArmAngle));
         panelButtons[10].onTrue(new ArmCommand(armSubsystem, homeArmAngle));
         panelButtons[11].onTrue(new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem, armSubsystem, localizationSubsystem));

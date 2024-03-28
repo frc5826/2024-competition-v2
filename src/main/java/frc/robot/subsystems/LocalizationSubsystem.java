@@ -275,7 +275,7 @@ public class LocalizationSubsystem extends LoggedSubsystem {
         RingResult ring = RingResult.getEmpty();
 
         for (RingResult ringResult : rings) {
-            if (ringResult.getDistance() < ring.getDistance()){
+            if (ringResult.getPitch() < ring.getPitch()){
                 ring = ringResult;
             }
         }

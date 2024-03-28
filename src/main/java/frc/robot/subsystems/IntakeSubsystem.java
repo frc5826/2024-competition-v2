@@ -50,7 +50,7 @@ public class IntakeSubsystem extends LoggedSubsystem {
     }
 
     public boolean hasRing() {
-        return hasRing;
+        return getBeamBreakIntake() || getBeamBreakShooter();
     }
 
 }
