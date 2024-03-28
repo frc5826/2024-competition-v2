@@ -27,7 +27,13 @@ public class VisionSubsystem extends LoggedSubsystem {
     private final List<RobotCamera> cameras;
 
     public VisionSubsystem() {
-
+        //Camera position conventions:
+        //  +x means camera is on the front of the robot
+        //  -x means camera is on the back of robot
+        //  +y means camera is on the left of the robot
+        //  -y means camera is on the right of the robot
+        //  +angles are counterclockwise
+        
         cameras = List.of(
 //                new RobotCamera(new Translation3d(inToMeters(2),inToMeters(-9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12,0), "beta-studio-1", true),
 //                new RobotCamera(new Translation3d(inToMeters(1),inToMeters(-13),inToMeters(21.5)), new Rotation3d(0,-Math.PI / 6,0), "beta-studio-2", true),
