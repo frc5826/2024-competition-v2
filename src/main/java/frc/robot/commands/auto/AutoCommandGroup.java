@@ -60,7 +60,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
                                     new PathWithStopDistance(localizationSubsystem, ring, 1.5)
                                             .onlyIf(() -> ring.getTranslation().getDistance(localizationSubsystem.getCurrentPose().getTranslation()) > 2),
 
-                                    new TurnToCommand(localizationSubsystem, swerveSubsystem, ring)
+                                    new TurnToCommand(localizationSubsystem, swerveSubsystem, ring, false)
 
                                     //TODO pickup sequence including drive to ring
 

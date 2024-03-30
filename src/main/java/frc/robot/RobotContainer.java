@@ -6,6 +6,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.util.Color;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmCommand;
+import frc.robot.commands.arm.TargetSpeakerCommand;
 import frc.robot.commands.climb.ClimberCommand;
 import frc.robot.commands.drive.AutoDriveToRingCommand;
 import frc.robot.commands.drive.TeleopDriveCommand;
@@ -62,6 +64,8 @@ public class RobotContainer
         SignalLogger.enableAutoLogging(false);
 
         CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, teleopDriveCommand);
+
+        DataLogManager.start();
     }
 
     private void setupXboxBindings() {
@@ -86,7 +90,7 @@ public class RobotContainer
         panelButtons[8].whileTrue(new IntakeCommand(intakeSubsystem, 0.3));
         panelButtons[9].onTrue(new ArmCommand(armSubsystem, ampArmAngle));
         panelButtons[10].onTrue(new ArmCommand(armSubsystem, homeArmAngle));
-        panelButtons[11].onTrue(new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem, armSubsystem, localizationSubsystem));
+        panelButtons[11].onTrue(new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem, armSubsystem, localizationSubsystem, swerveSubsystem));
         //panelButtons[11].onTrue(new RunCommand(() -> shooterSubsystem.setShooterSpeed(500)));
     }
 

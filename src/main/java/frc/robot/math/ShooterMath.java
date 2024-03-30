@@ -10,8 +10,18 @@ public class ShooterMath {
     }
 
     public static double getShootingAngle(Pose2d robotPose, Pose2d targetPose) {
-        return Math.toRadians(90) - Math.atan2(Constants.cSpeakerTargetHeight + Constants.heightCussion - (Constants.averageArmHeight),
-                getFieldDistance(robotPose, targetPose));
+//        return 90 - Math.toDegrees(Math.atan2(Constants.cSpeakerTargetHeight + Constants.heightCussion - (Constants.averageArmHeight),
+//                getFieldDistance(robotPose, targetPose)));
+        double guess =  90 - Math.toDegrees(Math.atan2(Constants.cSpeakerTargetHeight + Constants.heightCussion - (Constants.averageArmHeight),
+                getFieldDistance(robotPose, targetPose)));
+        double armHeight = Math.cos(Math.toRadians(guess)) * .97;
+        for(int i = 0; i < 10; i++){
+            guess = 90 - Math.toDegrees(Math.atan2(Constants.cSpeakerTargetHeight + Constants.heightCussion - (armHeight),
+                    getFieldDistance(robotPose, targetPose)));
+            armHeight = Math.cos(Math.toRadians(guess)) * .97;
+        }
+
+        return guess;
     }
 
     //when getting a difference between two angles this method will

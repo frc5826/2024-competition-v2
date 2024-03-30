@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Quaternion;
+import edu.wpi.first.math.geometry.Rotation3d;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,5 +15,10 @@ class ExampleTest
     void twoPlusTwoShouldEqualFour()
     {
         assertEquals(4, 2 + 2);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Rotation3d(Math.PI, -Math.PI/4, Math.PI));
+    System.out.println(new Rotation3d(new Quaternion(-0.13, 0,.99, 0)).getY());
     }
 }

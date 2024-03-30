@@ -32,15 +32,26 @@ public class VisionSubsystem extends LoggedSubsystem {
         //  -x means camera is on the back of robot
         //  +y means camera is on the left of the robot
         //  -y means camera is on the right of the robot
-        //  +angles are counterclockwise
+        //  ** -pitch -> facing up **
         
-        cameras = List.of(
+//        cameras = List.of(
 //                new RobotCamera(new Translation3d(inToMeters(2),inToMeters(-9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12,0), "beta-studio-1", true),
 //                new RobotCamera(new Translation3d(inToMeters(1),inToMeters(-13),inToMeters(21.5)), new Rotation3d(0,-Math.PI / 6,0), "beta-studio-2", true),
-                //new RobotCamera(new Translation3d(inToMeters(-2),inToMeters(9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12, 0), "gamma-studio", true),
-                new RobotCamera(new Translation3d(inToMeters(1),inToMeters(13),inToMeters(21.5)), new Rotation3d(0,-Math.PI / 6, 0), "gamma-3000", false),
-                //new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "alpha-studio", true),
-                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "alpha-3000", false)
+//                new RobotCamera(new Translation3d(inToMeters(-2),inToMeters(9.5),inToMeters(22)), new Rotation3d(0,Math.PI / 12, 0), "gamma-studio", true),
+//                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0,0, 0), "gamma-3000", false),
+//                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "alpha-studio", true),
+//                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "alpha-3000", false)
+//        );
+
+        cameras = List.of(
+                //TODO - Rotate the studio cameras
+                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0,0, 0), "alpha-3000", false),
+                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "gamma-3000", false),
+
+                new RobotCamera(new Translation3d(inToMeters(-2), inToMeters(12.5), inToMeters(22.75)), new Rotation3d(Math.PI, -Math.PI/4, Math.PI), "alpha-studio", true),
+                new RobotCamera(new Translation3d(inToMeters(-3.5), inToMeters(9), inToMeters(22)), new Rotation3d(Math.PI, -Math.PI/12, Math.PI), "beta-one-studio", true),
+                new RobotCamera(new Translation3d(inToMeters(-2), inToMeters(-9.5), inToMeters(22)), new Rotation3d(Math.PI, -Math.PI/12, 0), "beta-two-studio", true),
+                new RobotCamera(new Translation3d(inToMeters(-3.5), inToMeters(-12.5), inToMeters(22.75)), new Rotation3d(Math.PI, -Math.PI/4, 0), "gamma-studio", true)
         );
 
     }

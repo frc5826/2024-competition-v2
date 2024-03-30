@@ -87,7 +87,8 @@ public class ArmSubsystem extends LoggedSubsystem {
     public void setDesiredArmAngle(double armAngleDegrees){
         double clampedAngle = clamp(armAngleDegrees, -7, 110);
         desiredArmRotations = clampedAngle / 360;
-        controller.setGoal(desiredArmRotations);//TODO
+        controller.setGoal(desiredArmRotations);
+        rotatePID.calculate();
     }
 
     public void setArmHome(){
@@ -119,7 +120,7 @@ public class ArmSubsystem extends LoggedSubsystem {
     }
 
     public double getRotationDegrees(){
-        return rotateEncoder.get() * 360;
+        return getRotation() * 360;
     }
 
     public double getRotationAbsolute(){

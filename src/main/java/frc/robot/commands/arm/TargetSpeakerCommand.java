@@ -22,15 +22,29 @@ public class TargetSpeakerCommand extends LoggedCommand {
     }
 
     @Override
-    public void execute() {
-        super.execute();
-
+    public void initialize() {
+        super.initialize();
         armSubsystem.setDesiredArmAngle(ShooterMath.getShootingAngle(
                 localizationSubsystem.getCurrentPose(), FieldOrientation.getOrientation().getSpeakerTargetPos()));
     }
 
     @Override
     public boolean isFinished() {
-        return Math.abs(armSubsystem.getPIDError()) < Constants.armErrorTolerance;
+        boolean armFinished = Math.abs(armSubsystem.getPIDError()) < Constants.armErrorTolerance;
+//        System.out.println("Arm Finished: " + armFinished);
+//        System.out.println("PID Error: " + armSubsystem);
+        return armFinished;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+
+        System.out.println("Arm target angle: " + ShooterMath.getShootingAngle(
+                localizationSubsystem.getCurrentPose(), FieldOrientation.getOrientation().getSpeakerTargetPos()));
+
+        System.out.println("Distance to speaker: " + ShooterMath.getFieldDistance(localizationSubsystem.getCurrentPose(), FieldOrientation.getOrientation().getSpeakerTargetPos()));
+
+        System.out.println("Arm angle: " + armSubsystem.getRotationDegrees());
     }
 }

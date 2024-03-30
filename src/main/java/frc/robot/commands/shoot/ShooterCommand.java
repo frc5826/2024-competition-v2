@@ -26,4 +26,5 @@ public class ShooterCommand extends LoggedCommand {
         super.end(interrupted);
         shooterSubsystem.setShooterOutput(0);
     }
+
 }

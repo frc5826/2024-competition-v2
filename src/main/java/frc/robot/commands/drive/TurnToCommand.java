@@ -4,23 +4,26 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.commands.LoggedCommand;
 import frc.robot.math.PID;
 import frc.robot.math.ShooterMath;
 import frc.robot.subsystems.LocalizationSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class TurnToCommand extends Command {
+public class TurnToCommand extends LoggedCommand {
 
     private LocalizationSubsystem localizationSubsystem;
     private SwerveSubsystem swerveSubsystem;
-    private Pose2d pose;
+    private final Pose2d pose;
 
-    private PID turnPID = new PID(Constants.cTurnPID, 6, 0.01, 0.01, this::getTurn);
+    private PID turnPID = new PID(Constants.cTurnPID, 6, 1, 0.005, this::getTurn);
+    private boolean speaker;
 
-    public TurnToCommand(LocalizationSubsystem localizationSubsystem, SwerveSubsystem swerveSubsystem, Pose2d poseToTurnTo) {
+    public TurnToCommand(LocalizationSubsystem localizationSubsystem, SwerveSubsystem swerveSubsystem, Pose2d poseToTurnTo, boolean speaker) {
         this.localizationSubsystem = localizationSubsystem;
         this.swerveSubsystem = swerveSubsystem;
         this.pose = poseToTurnTo;
+        this.speaker = speaker;
 
         addRequirements(swerveSubsystem);
     }
@@ -38,7 +41,7 @@ public class TurnToCommand extends Command {
     private double getTurn() {
         return -ShooterMath.fixSpin(pose.getTranslation()
                 .minus(localizationSubsystem.getCurrentPose().getTranslation()).getAngle().getRadians()
-                - localizationSubsystem.getCurrentPose().getRotation().getRadians());
+                - localizationSubsystem.getCurrentPose().getRotation().getRadians() - (speaker ? Math.PI : 0));
 
     }
 
@@ -49,6 +52,6 @@ public class TurnToCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(getTurn()) < 0.15;
+        return Math.abs(getTurn()) < 0.025;
     }
 }

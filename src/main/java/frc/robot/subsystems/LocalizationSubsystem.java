@@ -50,7 +50,7 @@ public class LocalizationSubsystem extends LoggedSubsystem {
 
     private Rotation2d rotationTarget;
 
-    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(10));
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.25, 0.25, Units.degreesToRadians(10));
 
     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(5));
 
