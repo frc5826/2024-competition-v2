@@ -10,18 +10,22 @@ public class ShooterMath {
     }
 
     public static double getShootingAngle(Pose2d robotPose, Pose2d targetPose) {
-//        return 90 - Math.toDegrees(Math.atan2(Constants.cSpeakerTargetHeight + Constants.heightCussion - (Constants.averageArmHeight),
-//                getFieldDistance(robotPose, targetPose)));
-        double guess =  90 - Math.toDegrees(Math.atan2(Constants.cSpeakerTargetHeight + Constants.heightCussion - (Constants.averageArmHeight),
-                getFieldDistance(robotPose, targetPose)));
+        double fieldDistance = getFieldDistance(robotPose, targetPose);
+
+//        double heightCussion = Math.pow(.03 * fieldDistance, 2) - .12;
+
+//        System.out.println("Height cussion: " + heightCussion);
+
+        double guess =  90 - Math.toDegrees(Math.atan2(Constants.cSpeakerTargetHeight - (Constants.averageArmHeight),
+                fieldDistance));
         double armHeight = Math.cos(Math.toRadians(guess)) * .97;
-        for(int i = 0; i < 10; i++){
-            guess = 90 - Math.toDegrees(Math.atan2(Constants.cSpeakerTargetHeight + Constants.heightCussion - (armHeight),
-                    getFieldDistance(robotPose, targetPose)));
+        for(int i = 0; i < 50; i++){
+            guess = 90 - Math.toDegrees(Math.atan2(Constants.cSpeakerTargetHeight - armHeight,
+                    fieldDistance));
             armHeight = Math.cos(Math.toRadians(guess)) * .97;
         }
 
-        return guess;
+        return guess + (Constants.armErrorTolerance * 360);
     }
 
     //when getting a difference between two angles this method will
@@ -34,6 +38,12 @@ public class ShooterMath {
         }
 
         return angleDifference;
+    }
+
+    public static double getSpeakerTurn(Pose2d targetPose, Pose2d currentPose, boolean speaker) {
+        return -ShooterMath.fixSpin(targetPose.getTranslation()
+                .minus(currentPose.getTranslation()).getAngle().getRadians()
+                - currentPose.getRotation().getRadians() - (speaker ? Math.PI : 0));
     }
 
 }

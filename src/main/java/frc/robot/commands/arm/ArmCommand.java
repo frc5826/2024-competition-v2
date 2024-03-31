@@ -9,10 +9,16 @@ public class ArmCommand extends LoggedCommand {
 
     private ArmSubsystem armSubsystem;
     private double goal;
+    private double slop;
 
     public ArmCommand(ArmSubsystem armSubsystem, double goalRotations) {
+        this(armSubsystem, goalRotations, Constants.armErrorTolerance);
+    }
+
+    public ArmCommand(ArmSubsystem armSubsystem, double goalRotations, double slop) {
         this.armSubsystem = armSubsystem;
         this.goal = goalRotations;
+        this.slop = slop;
 
         addRequirements(armSubsystem);
     }
@@ -31,6 +37,6 @@ public class ArmCommand extends LoggedCommand {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(armSubsystem.getPIDError()) < Constants.armErrorTolerance;
+        return Math.abs(armSubsystem.getPIDError()) < slop;
     }
 }

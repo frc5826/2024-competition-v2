@@ -31,20 +31,11 @@ public class TargetSpeakerCommand extends LoggedCommand {
     @Override
     public boolean isFinished() {
         boolean armFinished = Math.abs(armSubsystem.getPIDError()) < Constants.armErrorTolerance;
-//        System.out.println("Arm Finished: " + armFinished);
-//        System.out.println("PID Error: " + armSubsystem);
         return armFinished;
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-
-        System.out.println("Arm target angle: " + ShooterMath.getShootingAngle(
-                localizationSubsystem.getCurrentPose(), FieldOrientation.getOrientation().getSpeakerTargetPos()));
-
-        System.out.println("Distance to speaker: " + ShooterMath.getFieldDistance(localizationSubsystem.getCurrentPose(), FieldOrientation.getOrientation().getSpeakerTargetPos()));
-
-        System.out.println("Arm angle: " + armSubsystem.getRotationDegrees());
     }
 }

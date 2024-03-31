@@ -64,4 +64,9 @@ public class TeleopDriveCommand extends LoggedCommand {
 
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        swerveSubsystem.driveRobotOriented(new ChassisSpeeds(0, 0, 0));
+    }
 }

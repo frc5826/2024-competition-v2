@@ -106,7 +106,7 @@ public class LocalizationSubsystem extends LoggedSubsystem {
 
         if(fieldLayout != null){
             for(AprilTagResult result : visionSubsystem.getAprilTagResults()){
-                if(!processed.containsKey(result.getId()) || !processed.get(result.getId()).equals(result)) {
+                if(!processed.containsKey(result.getId()) || processed.get(result.getId()).getTimestamp() != result.getTimestamp()) {
                     processed.put(result.getId(), result);
                     Optional<Pose3d> tagPose = fieldLayout.getTagPose(result.getId());
                     if (tagPose.isPresent()) {
@@ -186,10 +186,10 @@ public class LocalizationSubsystem extends LoggedSubsystem {
 
     public Command buildPath(Pose2d targetPose) {
         PathConstraints constraints = new PathConstraints(
-                2.0,
-                2.0,
+                3.6,
+                4,
                 2 * Math.PI,
-                2 * Math.PI);
+                3 * Math.PI);
 
         Command path = AutoBuilder.pathfindToPose(targetPose, constraints);
 

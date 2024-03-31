@@ -12,13 +12,22 @@ public class PathWithStopDistance extends LoggedCommand {
     private Pose2d ringPose;
     private double stopDistance;
 
+    private boolean inverted = false;
+
     private Command buildCommand;
     public PathWithStopDistance(LocalizationSubsystem localizationSubsystem, Pose2d ringPose, double stopDistance) {
+        this(localizationSubsystem, ringPose, stopDistance, false);
+    }
+
+    public PathWithStopDistance(LocalizationSubsystem localizationSubsystem, Pose2d ringPose,
+                                double stopDistance, boolean inverted) {
         this.localizationSubsystem = localizationSubsystem;
 
         this.ringPose = ringPose;
 
         this.stopDistance = stopDistance;
+
+        this.inverted = inverted;
     }
 
     @Override
@@ -32,8 +41,11 @@ public class PathWithStopDistance extends LoggedCommand {
     @Override
     public void execute() {
         buildCommand.execute();
+
+        double offset = inverted ? 180 : 0;
+
         localizationSubsystem.setRotationTarget(ringPose.getTranslation()
-                .minus(localizationSubsystem.getCurrentPose().getTranslation()).getAngle());
+                .minus(localizationSubsystem.getCurrentPose().getTranslation()).getAngle().minus(Rotation2d.fromDegrees(offset)));
     }
 
     @Override
@@ -46,13 +58,7 @@ public class PathWithStopDistance extends LoggedCommand {
 
     @Override
     public boolean isFinished() {
-        PathConstraints constraints = new PathConstraints(
-                2.0,
-                1.0,
-                3.14159,
-                3.14159);
             Pose2d currentPose = localizationSubsystem.getCurrentPose();
-
-            return currentPose.getTranslation().getDistance(ringPose.getTranslation()) - stopDistance <= 0;
+            return currentPose.getTranslation().getDistance(ringPose.getTranslation()) <= stopDistance;
     }
 }

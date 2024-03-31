@@ -107,4 +107,19 @@ public class RingResult {
         return new RingResult();
     }
 
+    @Override
+    public String toString() {
+        return "RingResult{" +
+                "camera=" + camera +
+                ", yaw=" + yaw +
+                ", pitch=" + pitch +
+                ", area=" + area +
+                ", distance=" + distance +
+                ", robotYaw=" + robotYaw +
+                ", robotPose=" + robotPose +
+                ", fieldPose=" + fieldPose +
+                ", isLeft=" + isLeft +
+                ", offset=" + offset +
+                '}';
+    }
 }

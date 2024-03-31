@@ -26,6 +26,9 @@ public class VisionSubsystem extends LoggedSubsystem {
 
     private final List<RobotCamera> cameras;
 
+    private final RobotCamera leftRingCamera;
+    private final RobotCamera rightRingCamera;
+
     public VisionSubsystem() {
         //Camera position conventions:
         //  +x means camera is on the front of the robot
@@ -43,11 +46,12 @@ public class VisionSubsystem extends LoggedSubsystem {
 //                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "alpha-3000", false)
 //        );
 
-        cameras = List.of(
-                //TODO - Rotate the studio cameras
-                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0,0, 0), "alpha-3000", false),
-                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "gamma-3000", false),
+        leftRingCamera = new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0,0, 0), "alpha-3000", false);
+        rightRingCamera = new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "gamma-3000", false);
 
+        cameras = List.of(
+                leftRingCamera,
+                rightRingCamera,
                 new RobotCamera(new Translation3d(inToMeters(-2), inToMeters(12.5), inToMeters(22.75)), new Rotation3d(Math.PI, -Math.PI/4, Math.PI), "alpha-studio", true),
                 new RobotCamera(new Translation3d(inToMeters(-3.5), inToMeters(9), inToMeters(22)), new Rotation3d(Math.PI, -Math.PI/12, Math.PI), "beta-one-studio", true),
                 new RobotCamera(new Translation3d(inToMeters(-2), inToMeters(-9.5), inToMeters(22)), new Rotation3d(Math.PI, -Math.PI/12, 0), "beta-two-studio", true),
@@ -104,7 +108,7 @@ public class VisionSubsystem extends LoggedSubsystem {
     public Pair<RobotCamera, List<PhotonTrackedTarget>> getRings(boolean isLeft) {
         List<PhotonTrackedTarget> targets = new LinkedList<>();
 
-        RobotCamera camera = isLeft ? cameras.get(0) : cameras.get(1);
+        RobotCamera camera = isLeft ? leftRingCamera : rightRingCamera;
 
         if (!camera.isAprilTag()) {
             PhotonPipelineResult result = camera.getCamera().getLatestResult();

@@ -10,22 +10,27 @@ import frc.robot.math.ShooterMath;
 import frc.robot.subsystems.LocalizationSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
+import java.util.function.Supplier;
+
 public class TurnToCommand extends LoggedCommand {
 
     private LocalizationSubsystem localizationSubsystem;
     private SwerveSubsystem swerveSubsystem;
-    private final Pose2d pose;
+    private final Supplier<Pose2d> pose;
 
-    private PID turnPID = new PID(Constants.cTurnPID, 6, 1, 0.005, this::getTurn);
+    private PID turnPID = new PID(Constants.cTurnPID, 6, 1.25, 0.005, this::getTurn);
     private boolean speaker;
 
-    public TurnToCommand(LocalizationSubsystem localizationSubsystem, SwerveSubsystem swerveSubsystem, Pose2d poseToTurnTo, boolean speaker) {
+    public TurnToCommand(LocalizationSubsystem localizationSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Pose2d> poseToTurnTo, boolean speaker) {
         this.localizationSubsystem = localizationSubsystem;
         this.swerveSubsystem = swerveSubsystem;
         this.pose = poseToTurnTo;
         this.speaker = speaker;
-
         addRequirements(swerveSubsystem);
+    }
+
+    public TurnToCommand(LocalizationSubsystem localizationSubsystem, SwerveSubsystem swerveSubsystem, Pose2d poseToTurnTo, boolean speaker) {
+        this(localizationSubsystem,swerveSubsystem,() -> poseToTurnTo,speaker);
     }
 
     @Override
@@ -36,12 +41,20 @@ public class TurnToCommand extends LoggedCommand {
     @Override
     public void initialize() {
         turnPID.setGoal(0);
+        if(pose.get() == null) {
+            System.err.println("Turn to speaker command was given an invalid location!!!!");
+            this.cancel();
+        }
     }
 
     private double getTurn() {
-        return -ShooterMath.fixSpin(pose.getTranslation()
-                .minus(localizationSubsystem.getCurrentPose().getTranslation()).getAngle().getRadians()
-                - localizationSubsystem.getCurrentPose().getRotation().getRadians() - (speaker ? Math.PI : 0));
+//        return -ShooterMath.fixSpin(pose.get().getTranslation()
+//                .minus(localizationSubsystem.getCurrentPose().getTranslation()).getAngle().getRadians()
+//                - localizationSubsystem.getCurrentPose().getRotation().getRadians() - (speaker ? Math.PI : 0));
+
+        Pose2d current = localizationSubsystem.getCurrentPose();
+        double turnto = ShooterMath.getSpeakerTurn(pose.get(), current, speaker);
+        return turnto;
 
     }
 
@@ -52,6 +65,6 @@ public class TurnToCommand extends LoggedCommand {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(getTurn()) < 0.025;
+        return Math.abs(getTurn()) < 0.007;
     }
 }

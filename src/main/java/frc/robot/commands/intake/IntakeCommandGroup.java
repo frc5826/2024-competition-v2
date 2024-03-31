@@ -28,18 +28,18 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
 
                 Commands.parallel(
                         new ArmCommand(armSubsystem, Constants.intakeArmAngle),
-                        new IntakeCommand(intakeSubsystem, -1).until(intakeSubsystem::getBeamBreakIntake)
-                ),
+                        new IntakeCommand(intakeSubsystem, -1)
+                ).until(intakeSubsystem::getBeamBreakIntake),
                 Commands.parallel(
                         new ArmCommand(armSubsystem, 10),
-                        new IntakeCommand(intakeSubsystem, -0.5).until(intakeSubsystem::getBeamBreakShooter)
-                ),
-                new InstantCommand(() -> {
-                    xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
-                }),
-                new WaitCommand(0.25).finallyDo(() -> {
-                    xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.0);
-                })
+                        new IntakeCommand(intakeSubsystem, -0.5)
+                ).until(intakeSubsystem::getBeamBreakShooter)
+//                new InstantCommand(() -> {
+//                    xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
+//                }),
+//                new WaitCommand(0.25).finallyDo(() -> {
+//                    xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.0);
+//                })
         );
     }
 

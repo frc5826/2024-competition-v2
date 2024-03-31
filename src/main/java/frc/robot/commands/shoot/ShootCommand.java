@@ -37,6 +37,8 @@ public class ShootCommand extends LoggedCommand {
         double difference1 = Math.abs(shooterSubsystem.getShooterMotor1Speed() - Constants.maxShooterRPM);
         double difference2 = Math.abs(shooterSubsystem.getShooterMotor2Speed() - Constants.maxShooterRPM);
 
+
+        boolean overshot = shooterSubsystem.getShooterMotor1Speed() > Constants.maxShooterRPM || shooterSubsystem.getShooterMotor2Speed() > Constants.maxShooterRPM;
         boolean toleranceMet = difference1 < Constants.shooterTolerance && difference2 < Constants.shooterTolerance;
         //If something happens and we can't spin the motors up, we still want to try shooting after some point.
         boolean timeElapsed = initInstant != null && Duration.between(initInstant, Instant.now()).abs().getSeconds() > 3;
@@ -45,7 +47,7 @@ public class ShootCommand extends LoggedCommand {
             System.out.println("WARNING - Time Elapsed on Shooters");
         }
 
-        if (toleranceMet || timeElapsed) {
+        if (toleranceMet || timeElapsed || overshot) {
             intakeSubsystem.setIntakeMotor(-1);
         }
     }

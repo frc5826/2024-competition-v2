@@ -30,16 +30,16 @@ public final class Constants
     public static final double intakeArmAngle = -6.5;
     public static final double homeArmAngle = -6.5;
     public static final double shootArmAngle = 48;
-    public static final double climbArmAngle = 90;
+    public static final double climbArmAngle = 100;
     //public static final double shootArmAngle = 70;
 
-    public static final double maxShooterRPM = 5000;
-    public static final double shooterTolerance = maxShooterRPM * 0.03;
+    public static final double maxShooterRPM = 4500;
+    public static final double shooterTolerance = maxShooterRPM * 0.07;
 
-    public static final double climbUpPower = 0.5;
+    public static final double climbUpPower = 0.25;
     public static final double climbDownPower = -1;
 
-    public static final double armErrorTolerance = 0.005;
+    public static final double armErrorTolerance = 0.0075;
 
     public static final int climberLeftID = 9;
     public static final int climberRightID = 10;
@@ -77,7 +77,7 @@ public final class Constants
 
     //shooting constants
     public static final double cSpeakerTargetHeight = 2;
-    public static final double heightCussion = .05;
+    public static final double heightCussion = 0;
     public static final double averageArmHeight = 1;
 
     public static final PIDConstants cTurnPID = new PIDConstants(3.0, 0.01, 0.25);

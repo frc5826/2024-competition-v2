@@ -22,15 +22,14 @@ public class ShootSpeakerCommandGroup extends SequentialCommandGroup {
                         new IntakeCommand(intakeSubsystem, 0.1).onlyWhile(intakeSubsystem::getBeamBreakShooter),
                         new ShooterCommand(shooterSubsystem, -0.1).onlyWhile(intakeSubsystem::getBeamBreakShooter)
                 ),
-                new TargetSpeakerCommand(armSubsystem, localizationSubsystem),
-                new TurnToCommand(localizationSubsystem, swerveSubsystem, FieldOrientation.getOrientation().getSpeakerTargetPos(), true),
+                Commands.deadline(
+                        Commands.parallel(
+                                new TargetSpeakerCommand(armSubsystem, localizationSubsystem),
+                                new TurnToCommand(localizationSubsystem, swerveSubsystem, () -> FieldOrientation.getOrientation().getSpeakerTargetPos(), true)
+                        ),
+                        new SpinupShooterCommand(shooterSubsystem)
+                ),
                 new ShootCommand(shooterSubsystem, intakeSubsystem)
-//                Commands.deadline(
-//                        Commands.parallel(new TargetSpeakerCommand(armSubsystem, localizationSubsystem),
-//                                new TurnToCommand(localizationSubsystem, swerveSubsystem, FieldOrientation.getOrientation().getSpeakerTargetPos(), true)),
-//                        new SpinupShooterCommand(shooterSubsystem)
-//                ),
-//                new ShootCommand(shooterSubsystem, intakeSubsystem)
         );
     }
 }
