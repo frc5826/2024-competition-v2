@@ -31,6 +31,7 @@ import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.IntakeCommandGroup;
 import frc.robot.commands.intake.IntakeSecondHalfCommandGroup;
 import frc.robot.commands.led.FlashLEDCommand;
+import frc.robot.commands.shoot.LameShootCommand;
 import frc.robot.commands.shoot.ShootSpeakerCommandGroup;
 import frc.robot.led.TeensyLED;
 import frc.robot.positioning.FieldOrientation;
@@ -90,7 +91,7 @@ public class RobotContainer
 
         CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, teleopDriveCommand);
 
-        DataLogManager.start();
+        //DataLogManager.start();
 
         setupEndPose();
         configureAutoTab();
@@ -116,6 +117,7 @@ public class RobotContainer
         panelButtons[3].whileTrue(new FlashLEDCommand(teensyLED, Color.kYellow));
         panelButtons[4].whileTrue(new IntakeSecondHalfCommandGroup(intakeSubsystem, shooterSubsystem));
         panelButtons[5].onTrue(new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem));
+        panelButtons[6].onTrue(new LameShootCommand(armSubsystem, shooterSubsystem, intakeSubsystem));
         panelButtons[7].onTrue(new ArmCommand(armSubsystem, shootArmAngle));
         panelButtons[8].whileTrue(new IntakeCommand(intakeSubsystem, 0.3));
         panelButtons[9].onTrue(new ArmCommand(armSubsystem, ampArmAngle));

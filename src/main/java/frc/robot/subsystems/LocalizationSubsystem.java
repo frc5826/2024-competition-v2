@@ -37,7 +37,7 @@ import java.util.*;
 import static frc.robot.positioning.FieldOrientation.getOrientation;
 
 //Code pulled from - https://github.com/STMARobotics/frc-7028-2023/blob/5916bb426b97f10e17d9dfd5ec6c3b6fda49a7ce/src/main/java/frc/robot/subsystems/PoseEstimatorSubsystem.java
-public class LocalizationSubsystem extends LoggedSubsystem {
+public class LocalizationSubsystem extends SubsystemBase {
 
     private AprilTagFieldLayout fieldLayout;
     private final VisionSubsystem visionSubsystem;
@@ -281,5 +281,10 @@ public class LocalizationSubsystem extends LoggedSubsystem {
         }
 
         return ring;
+    }
+
+    public boolean seesRing() {
+        return !bestLeftRing.equals(RingResult.getEmpty()) ||
+                !bestRightRing.equals(RingResult.getEmpty());
     }
 }

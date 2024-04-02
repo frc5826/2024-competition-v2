@@ -27,6 +27,9 @@ public class ShooterSubsystem extends LoggedSubsystem {
         shooterMotor1.setIdleMode(CANSparkBase.IdleMode.kBrake);
         shooterMotor2.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
+        shooterMotor1.setSmartCurrentLimit(40);
+        shooterMotor2.setSmartCurrentLimit(40);
+
 //        shooterMotor1.setOpenLoopRampRate(0);
 //        shooterMotor2.setOpenLoopRampRate(0);
 

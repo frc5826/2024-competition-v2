@@ -29,7 +29,7 @@ public class AutoDriveToRingCommand extends LoggedCommand {
 
     private PID turnPID = new PID(Constants.cTurnPID, 3, 0.01, 0.01, this::getAverageYaw);
 
-    private Instant initialTime;
+    private Long initialTime;
 
     private double speed;
 
@@ -52,7 +52,9 @@ public class AutoDriveToRingCommand extends LoggedCommand {
 
         turnPID.setGoal(0);
 
-        initialTime = Instant.now();
+        initialTime = System.currentTimeMillis();
+
+        seesRing = true;
     }
 
     @Override
@@ -69,8 +71,10 @@ public class AutoDriveToRingCommand extends LoggedCommand {
 //            xboxControllerSubsystem.set(rumbleMs.intValue());
 //        }
 
-        seesRing = !leftTarget.getFieldPose().equals(new Translation2d(0, 0)) ||
-                !rightTarget.getFieldPose().equals(new Translation2d(0, 0));
+        seesRing = !leftTarget.equals(RingResult.getEmpty()) ||
+                !rightTarget.equals(RingResult.getEmpty());
+
+        System.out.println("Sees Ring: " + seesRing);
 
         //System.out.println(turnPID.getError());
 
@@ -98,8 +102,11 @@ public class AutoDriveToRingCommand extends LoggedCommand {
 
     @Override
     public boolean isFinished() {
-        boolean noRing = !seesRing;// && (initialTime == null || Duration.between(initialTime, Instant.now()).abs().get(ChronoUnit.MILLIS) > 500);
+        boolean noRing = !seesRing  && (initialTime == null || Math.abs(initialTime - System.currentTimeMillis()) > 500);
         boolean hasRing = intakeSubsystem.hasRing();
+
+        System.out.println("noRing: " + noRing);
+        System.out.println("hasRing: " + hasRing);
 
         return noRing || hasRing;
     }
@@ -108,6 +115,7 @@ public class AutoDriveToRingCommand extends LoggedCommand {
     public void end(boolean interrupted) {
         super.end(interrupted);
         initialTime = null;
+        System.out.println("Auto DTR End: " + interrupted);
 
         swerveSubsystem.driveRobotOriented(new ChassisSpeeds(0, 0, 0));
     }

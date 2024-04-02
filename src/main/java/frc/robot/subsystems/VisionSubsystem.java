@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class VisionSubsystem extends LoggedSubsystem {
+public class VisionSubsystem extends SubsystemBase {
     //PhotonLib provides us a "PoseAmbiguity". According to their docs "Numbers above 0.2 are likely to be ambiguous".
     private static final double POSE_CUTOFF = 0.2;
 

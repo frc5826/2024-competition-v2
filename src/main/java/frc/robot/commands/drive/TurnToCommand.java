@@ -40,6 +40,7 @@ public class TurnToCommand extends LoggedCommand {
 
     @Override
     public void initialize() {
+        super.initialize();
         turnPID.setGoal(0);
         if(pose.get() == null) {
             System.err.println("Turn to speaker command was given an invalid location!!!!");
@@ -60,6 +61,7 @@ public class TurnToCommand extends LoggedCommand {
 
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         swerveSubsystem.stop();
     }
 

@@ -9,6 +9,7 @@ import frc.robot.math.RingMath;
 import org.photonvision.targeting.TargetCorner;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RingResult {
 
@@ -121,5 +122,18 @@ public class RingResult {
                 ", isLeft=" + isLeft +
                 ", offset=" + offset +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RingResult that = (RingResult) o;
+        return Double.compare(yaw, that.yaw) == 0 && Double.compare(pitch, that.pitch) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(yaw, pitch);
     }
 }

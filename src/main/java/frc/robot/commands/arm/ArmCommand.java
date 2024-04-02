@@ -32,7 +32,6 @@ public class ArmCommand extends LoggedCommand {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        System.out.println("finished");
     }
 
     @Override

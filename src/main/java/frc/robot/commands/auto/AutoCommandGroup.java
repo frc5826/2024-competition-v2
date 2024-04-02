@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.arm.ArmCommand;
 import frc.robot.commands.drive.AutoDriveToRingCommand;
@@ -75,10 +76,13 @@ public class AutoCommandGroup extends SequentialCommandGroup {
                                             new TurnToCommand(localizationSubsystem, swerveSubsystem, ring, false)
                                     ),
                                     new PathWithStopDistance(localizationSubsystem, ring, 2).onlyIf(() -> ring.getTranslation().getDistance(localizationSubsystem.getCurrentPose().getTranslation()) > 2.5),
+
+                                    new WaitCommand(.5).until(localizationSubsystem::seesRing),
+
                                     Commands.parallel(
-                                            new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem),
-                                            new AutoDriveToRingCommand(localizationSubsystem, swerveSubsystem, intakeSubsystem, xboxControllerSubsystem)
-                                    ),
+                                    new AutoDriveToRingCommand(localizationSubsystem, swerveSubsystem, intakeSubsystem, xboxControllerSubsystem),
+                                    new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem)
+                                    ).onlyIf(localizationSubsystem::seesRing),
 
 //                                    new PathWithStopDistance(localizationSubsystem, FieldOrientation.getOrientation().getSpeakerTargetPos(),
 //                                            3, true).onlyIf(intakeSubsystem::hasRing),
@@ -92,7 +96,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
                                         System.out.println("AUTO PATH - SPEAKER: " + true);
 
                                         return new Pose2d(shootTranslation, speakerRotation);
-                                    }, localizationSubsystem),
+                                    }, localizationSubsystem).onlyIf(intakeSubsystem::hasRing),
                                     new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem, armSubsystem,
                                             localizationSubsystem, swerveSubsystem).onlyIf(intakeSubsystem::hasRing)
 

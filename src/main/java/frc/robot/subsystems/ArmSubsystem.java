@@ -47,7 +47,7 @@ public class ArmSubsystem extends LoggedSubsystem {
         rotatePID = new PID(cRotateP, cRotateI, cRotateD, cRotateMax, cRotateMin, cRotateDeadband, this::getRotation);
 
         //TODO
-        controller = new ArmController(cRotateP, cRotateI, cRotateMax, cGravityConstant, cVelConstant, cMaxVel, cMaxAccel, this::getRotation);
+        //controller = new ArmController(cRotateP, cRotateI, cRotateMax, cGravityConstant, cVelConstant, cMaxVel, cMaxAccel, this::getRotation);
 
         setArmHome();
         setupArmTab();
@@ -63,7 +63,7 @@ public class ArmSubsystem extends LoggedSubsystem {
         speed = tab.add("speed", 0);
 
         tab.add("pid", rotatePID);
-        tab.add("armController", controller);
+        //tab.add("armController", controller);
 
 
     }
@@ -87,7 +87,8 @@ public class ArmSubsystem extends LoggedSubsystem {
     public void setDesiredArmAngle(double armAngleDegrees){
         double clampedAngle = clamp(armAngleDegrees, -7, 110);
         desiredArmRotations = clampedAngle / 360;
-        controller.setGoal(desiredArmRotations);
+        rotatePID.setGoal(desiredArmRotations);
+//        controller.setGoal(desiredArmRotations);
         rotatePID.calculate();
     }
 
