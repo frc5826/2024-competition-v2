@@ -102,7 +102,7 @@ public class AutoDriveToRingCommand extends LoggedCommand {
 
     @Override
     public boolean isFinished() {
-        boolean noRing = !seesRing  && (initialTime == null || Math.abs(initialTime - System.currentTimeMillis()) > 500);
+        boolean noRing = localizationSubsystem.timeSinceSeenRing() > 0.5;
         boolean hasRing = intakeSubsystem.hasRing();
 
 //        System.out.println("noRing: " + noRing);

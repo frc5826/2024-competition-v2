@@ -138,27 +138,27 @@ public class RobotContainer
         ShuffleboardTab autoTab = Shuffleboard.getTab("auto");
 
         var shootingX = autoTab.add("Shoot X", 0)
-                .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 16.5))
+                .withWidget(BuiltInWidgets.kTextView)
                 .withSize(2, 1).withPosition(3, 4)
                 .withProperties(Map.of("publish_all", true));
 
         var shootingY = autoTab.add("Shoot Y", 0)
-                .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 8.15))
+                .withWidget(BuiltInWidgets.kTextView)
                 .withSize(2, 1).withPosition(5, 4)
                 .withProperties(Map.of("publish_all", true));
 
         var x = autoTab.add("End X", 0)
-                .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 16.5))
+                .withWidget(BuiltInWidgets.kTextView)
                 .withSize(2, 1).withPosition(3, 2)
                 .withProperties(Map.of("publish_all", true));
 
         var y = autoTab.add("End Y", 0)
-                .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 8.15))
+                .withWidget(BuiltInWidgets.kTextView)
                 .withSize(2, 1).withPosition(3, 3)
                 .withProperties(Map.of("publish_all", true));
 
         var rot = autoTab.add("End Rotation", 0)
-                .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", -180, "max", 180))
+                .withWidget(BuiltInWidgets.kTextView)
                 .withSize(2, 1).withPosition(5, 2)
                 .withProperties(Map.of("publish_all", true));
 

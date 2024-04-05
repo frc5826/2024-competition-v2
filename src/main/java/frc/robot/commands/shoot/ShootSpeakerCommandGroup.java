@@ -19,16 +19,15 @@ public class ShootSpeakerCommandGroup extends SequentialCommandGroup {
                                     SwerveSubsystem swerveSubsystem) {
         addCommands(
                 Commands.parallel(
+                        new TargetSpeakerCommand(armSubsystem, localizationSubsystem),
+                        new TurnToCommand(localizationSubsystem, swerveSubsystem, () -> FieldOrientation.getOrientation().getSpeakerTargetPos(), true)
+                ),
+
+                Commands.parallel(
                         new IntakeCommand(intakeSubsystem, 0.1).onlyWhile(intakeSubsystem::getBeamBreakShooter),
                         new ShooterCommand(shooterSubsystem, -0.1).onlyWhile(intakeSubsystem::getBeamBreakShooter)
                 ),
-                Commands.deadline(
-                        Commands.parallel(
-                                new TargetSpeakerCommand(armSubsystem, localizationSubsystem),
-                                new TurnToCommand(localizationSubsystem, swerveSubsystem, () -> FieldOrientation.getOrientation().getSpeakerTargetPos(), true)
-                        ),
-                        new SpinupShooterCommand(shooterSubsystem)
-                ),
+
                 new ShootCommand(shooterSubsystem, intakeSubsystem)
         );
     }

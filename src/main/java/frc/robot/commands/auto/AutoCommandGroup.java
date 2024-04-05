@@ -23,6 +23,7 @@ import frc.robot.positioning.FieldOrientation;
 import frc.robot.positioning.Orientation;
 import frc.robot.subsystems.*;
 
+import static frc.robot.Constants.*;
 import static frc.robot.positioning.FieldOrientation.getOrientation;
 
 public class AutoCommandGroup extends SequentialCommandGroup {
@@ -49,6 +50,8 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         this.xboxControllerSubsystem = xboxControllerSubsystem;
 
         this.ringCount = ringCount;
+
+        addCommands(new ArmCommand(armSubsystem, homeArmAngle));
 
         if (getOrientation().isValid()) {
 
@@ -81,7 +84,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
 
                                     Commands.parallel(
                                     new AutoDriveToRingCommand(localizationSubsystem, swerveSubsystem, intakeSubsystem, xboxControllerSubsystem),
-                                    new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem)
+                                    new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem).until(() -> (localizationSubsystem.timeSinceSeenRing() > 2))
                                     ).onlyIf(localizationSubsystem::seesRing),
 
 //                                    new PathWithStopDistance(localizationSubsystem, FieldOrientation.getOrientation().getSpeakerTargetPos(),

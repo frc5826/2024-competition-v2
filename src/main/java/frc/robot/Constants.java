@@ -27,8 +27,8 @@ public final class Constants
     public static final double ringRightOffset = 0;
 
     public static final double ampArmAngle = 55;
-    public static final double intakeArmAngle = -6.5;
-    public static final double homeArmAngle = -6.5;
+    public static final double intakeArmAngle = -10;
+    public static final double homeArmAngle = -10;
     public static final double shootArmAngle = 48;
     public static final double climbArmAngle = 100;
     //public static final double shootArmAngle = 70;

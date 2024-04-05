@@ -62,6 +62,8 @@ public class LocalizationSubsystem extends SubsystemBase {
     private RingResult bestLeftRing = RingResult.getEmpty();
     private RingResult bestRightRing = RingResult.getEmpty();
 
+    private long lastTimeRingSeen;
+
     public LocalizationSubsystem(VisionSubsystem visionSubsystem, SwerveSubsystem swerveSubsystem) {
         try {
             //We're always going to use the "blue wall" as or origin. All positions will be absolute.
@@ -85,6 +87,8 @@ public class LocalizationSubsystem extends SubsystemBase {
         PPHolonomicDriveController.setRotationTargetOverride(this::updateRotationTarget);
 
         setupPathPlanner();
+
+        lastTimeRingSeen = 0;
     }
 
     public void setRotationTarget(Rotation2d rotation) { rotationTarget = rotation; }
@@ -133,9 +137,13 @@ public class LocalizationSubsystem extends SubsystemBase {
         bestLeftRing = getBestPickupRing(ringResultsLeft);
         bestRightRing = getBestPickupRing(ringResultsRight);
 
-        field.getObject("rings").setPoses(
-                new Pose2d(bestLeftRing.getFieldPose(), new Rotation2d()),
-                new Pose2d(bestRightRing.getFieldPose(), new Rotation2d()));
+//        field.getObject("rings").setPoses(
+//                new Pose2d(bestLeftRing.getFieldPose(), new Rotation2d()),
+//                new Pose2d(bestRightRing.getFieldPose(), new Rotation2d()));
+
+        if (seesRing()){
+            lastTimeRingSeen = System.currentTimeMillis();
+        }
     }
 
     public RingResult getBestLeftRing() {
@@ -186,7 +194,7 @@ public class LocalizationSubsystem extends SubsystemBase {
 
     public Command buildPath(Pose2d targetPose) {
         PathConstraints constraints = new PathConstraints(
-                3.6,
+                2.7,
                 4,
                 2 * Math.PI,
                 3 * Math.PI);
@@ -252,6 +260,7 @@ public class LocalizationSubsystem extends SubsystemBase {
 //        testTab.addDouble("right ring distance", () -> bestRightRing.getDistance());
 //        testTab.addDouble("right ring yaw", () -> Math.toDegrees(bestRightRing.getAngleToHeading()));
 //        testTab.addDoubleArray("right ring field pose", () -> new double[]{bestRightRing.getFieldPose().getX(), bestRightRing.getFieldPose().getY()});
+        testTab.addDouble("Time Since Seen Ring", this::timeSinceSeenRing);
     }
 
     public Pose2d getCurrentPose() {
@@ -288,5 +297,9 @@ public class LocalizationSubsystem extends SubsystemBase {
     public boolean seesRing() {
         return !bestLeftRing.equals(RingResult.getEmpty()) ||
                 !bestRightRing.equals(RingResult.getEmpty());
+    }
+
+    public double timeSinceSeenRing(){
+        return ((double)(System.currentTimeMillis() - lastTimeRingSeen)) / 1000;
     }
 }
