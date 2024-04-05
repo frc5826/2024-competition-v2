@@ -43,7 +43,7 @@ public class SwerveSubsystem extends LoggedSubsystem {
         }
         swerveDrive.setHeadingCorrection(false);
 
-        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
+        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.NONE;
     }
 
 

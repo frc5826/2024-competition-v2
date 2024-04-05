@@ -55,7 +55,7 @@ public final class Constants
         public static final int rotateEncoderID = 3;
         public static final int rotateMotor1ID = 11;
         public static final int rotateMotor2ID = 12;
-        public static final double armOffset = 0.632;
+        public static final double armOffset = 0.636;
         public static final double cRotateP = 6;
         public static final double cRotateI = 0;
         public static final double cRotateD = 0.4;
@@ -76,7 +76,7 @@ public final class Constants
     public static final double cTurnDeadband = 0.15;
 
     //shooting constants
-    public static final double cSpeakerTargetHeight = 2;
+    public static final double cSpeakerTargetHeight = 2.15;
     public static final double heightCussion = 0;
     public static final double averageArmHeight = 1;
 

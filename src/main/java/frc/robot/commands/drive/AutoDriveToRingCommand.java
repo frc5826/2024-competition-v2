@@ -74,7 +74,7 @@ public class AutoDriveToRingCommand extends LoggedCommand {
         seesRing = !leftTarget.equals(RingResult.getEmpty()) ||
                 !rightTarget.equals(RingResult.getEmpty());
 
-        System.out.println("Sees Ring: " + seesRing);
+        //System.out.println("Sees Ring: " + seesRing);
 
         //System.out.println(turnPID.getError());
 
@@ -105,8 +105,8 @@ public class AutoDriveToRingCommand extends LoggedCommand {
         boolean noRing = !seesRing  && (initialTime == null || Math.abs(initialTime - System.currentTimeMillis()) > 500);
         boolean hasRing = intakeSubsystem.hasRing();
 
-        System.out.println("noRing: " + noRing);
-        System.out.println("hasRing: " + hasRing);
+//        System.out.println("noRing: " + noRing);
+//        System.out.println("hasRing: " + hasRing);
 
         return noRing || hasRing;
     }
@@ -115,7 +115,7 @@ public class AutoDriveToRingCommand extends LoggedCommand {
     public void end(boolean interrupted) {
         super.end(interrupted);
         initialTime = null;
-        System.out.println("Auto DTR End: " + interrupted);
+//        System.out.println("Auto DTR End: " + interrupted);
 
         swerveSubsystem.driveRobotOriented(new ChassisSpeeds(0, 0, 0));
     }

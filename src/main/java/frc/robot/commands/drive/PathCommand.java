@@ -27,6 +27,7 @@ public class PathCommand extends LoggedCommand {
 
     @Override
     public void initialize() {
+        super.initialize();
         if(pathCommand != null){
             pathCommand.end(true);
             pathCommand = null;

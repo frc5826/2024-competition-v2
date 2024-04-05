@@ -217,9 +217,9 @@ public class LocalizationSubsystem extends SubsystemBase {
                 .withSize(2,2);
 
 
-        position.addDouble("Robot X", ()-> getCurrentPose().getX());
-        position.addDouble("Robot Y", ()-> getCurrentPose().getY());
-        position.addDouble("Robot rotation", ()-> swerveSubsystem.getHeading().getDegrees());
+//        position.addDouble("Robot X", ()-> getCurrentPose().getX());
+//        position.addDouble("Robot Y", ()-> getCurrentPose().getY());
+//        position.addDouble("Robot rotation", ()-> swerveSubsystem.getHeading().getDegrees());
 
 
         ShuffleboardLayout robot3DPose = tab.getLayout("robot 3d pose", BuiltInLayouts.kList)
@@ -243,13 +243,15 @@ public class LocalizationSubsystem extends SubsystemBase {
 
         ShuffleboardTab testTab = Shuffleboard.getTab("test tab");
 
-        testTab.addDouble("left ring distance", () -> bestLeftRing.getDistance());
-        testTab.addDouble("left ring yaw", () -> Math.toDegrees(bestLeftRing.getAngleToHeading()));
-        testTab.addDoubleArray("left ring field pose", () -> new double[]{bestLeftRing.getFieldPose().getX(), bestLeftRing.getFieldPose().getY()});
+        testTab.addBoolean("SeesRing",this::seesRing);
 
-        testTab.addDouble("right ring distance", () -> bestRightRing.getDistance());
-        testTab.addDouble("right ring yaw", () -> Math.toDegrees(bestRightRing.getAngleToHeading()));
-        testTab.addDoubleArray("right ring field pose", () -> new double[]{bestRightRing.getFieldPose().getX(), bestRightRing.getFieldPose().getY()});
+//        testTab.addDouble("left ring distance", () -> bestLeftRing.getDistance());
+//        testTab.addDouble("left ring yaw", () -> Math.toDegrees(bestLeftRing.getAngleToHeading()));
+//        testTab.addDoubleArray("left ring field pose", () -> new double[]{bestLeftRing.getFieldPose().getX(), bestLeftRing.getFieldPose().getY()});
+//
+//        testTab.addDouble("right ring distance", () -> bestRightRing.getDistance());
+//        testTab.addDouble("right ring yaw", () -> Math.toDegrees(bestRightRing.getAngleToHeading()));
+//        testTab.addDoubleArray("right ring field pose", () -> new double[]{bestRightRing.getFieldPose().getX(), bestRightRing.getFieldPose().getY()});
     }
 
     public Pose2d getCurrentPose() {

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmCommand;
@@ -33,6 +34,7 @@ import frc.robot.commands.intake.IntakeSecondHalfCommandGroup;
 import frc.robot.commands.led.FlashLEDCommand;
 import frc.robot.commands.shoot.LameShootCommand;
 import frc.robot.commands.shoot.ShootSpeakerCommandGroup;
+import frc.robot.commands.shoot.ShooterCommand;
 import frc.robot.led.TeensyLED;
 import frc.robot.positioning.FieldOrientation;
 import frc.robot.subsystems.*;
@@ -91,7 +93,7 @@ public class RobotContainer
 
         CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, teleopDriveCommand);
 
-        //DataLogManager.start();
+        DataLogManager.start();
 
         setupEndPose();
         configureAutoTab();
@@ -119,7 +121,7 @@ public class RobotContainer
         panelButtons[5].onTrue(new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem));
         panelButtons[6].onTrue(new LameShootCommand(armSubsystem, shooterSubsystem, intakeSubsystem));
         panelButtons[7].onTrue(new ArmCommand(armSubsystem, shootArmAngle));
-        panelButtons[8].whileTrue(new IntakeCommand(intakeSubsystem, 0.3));
+        panelButtons[8].whileTrue(Commands.parallel(new IntakeCommand(intakeSubsystem, 0.3), new ShooterCommand(shooterSubsystem,-0.1)));
         panelButtons[9].onTrue(new ArmCommand(armSubsystem, ampArmAngle));
         panelButtons[10].onTrue(new ArmCommand(armSubsystem, homeArmAngle));
         panelButtons[11].onTrue(new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem, armSubsystem, localizationSubsystem, swerveSubsystem));
