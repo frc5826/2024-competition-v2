@@ -58,7 +58,7 @@ public final class Constants
         public static final double armOffset = 0.636;
         public static final double cRotateP = 6;
         public static final double cRotateI = 0;
-        public static final double cRotateD = 0.4;
+        public static final double cRotateD = 0;
         public static final double cRotateMax = 1;
         public static final double cRotateMin = -1;
         public static final double cRotateDeadband = 0.0;

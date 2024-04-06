@@ -194,7 +194,7 @@ public class LocalizationSubsystem extends SubsystemBase {
 
     public Command buildPath(Pose2d targetPose) {
         PathConstraints constraints = new PathConstraints(
-                2.7,
+                3.1,
                 4,
                 2 * Math.PI,
                 3 * Math.PI);
