@@ -35,6 +35,7 @@ import frc.robot.commands.led.FlashLEDCommand;
 import frc.robot.commands.shoot.LameShootCommand;
 import frc.robot.commands.shoot.ShootSpeakerCommandGroup;
 import frc.robot.commands.shoot.ShooterCommand;
+import frc.robot.commands.shoot.SuppliedLameShootCommand;
 import frc.robot.led.TeensyLED;
 import frc.robot.positioning.FieldOrientation;
 import frc.robot.subsystems.*;
@@ -119,7 +120,7 @@ public class RobotContainer
         panelButtons[3].whileTrue(new FlashLEDCommand(teensyLED, Color.kYellow));
         panelButtons[4].whileTrue(new IntakeSecondHalfCommandGroup(intakeSubsystem, shooterSubsystem));
         panelButtons[5].onTrue(new IntakeCommandGroup(intakeSubsystem, armSubsystem, shooterSubsystem));
-        panelButtons[6].onTrue(new LameShootCommand(armSubsystem, shooterSubsystem, intakeSubsystem));
+        panelButtons[6].onTrue(new SuppliedLameShootCommand(armSubsystem, shooterSubsystem, intakeSubsystem));
         panelButtons[7].onTrue(new ArmCommand(armSubsystem, shootArmAngle));
         panelButtons[8].whileTrue(Commands.parallel(new IntakeCommand(intakeSubsystem, 0.3), new ShooterCommand(shooterSubsystem,-0.1)));
         panelButtons[9].onTrue(new ArmCommand(armSubsystem, ampArmAngle));

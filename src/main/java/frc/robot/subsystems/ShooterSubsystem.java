@@ -3,11 +3,10 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.shuffleboard.*;
+
+import java.util.Map;
+import java.util.function.DoubleSupplier;
 
 import static frc.robot.Constants.*;
 
@@ -16,6 +15,16 @@ public class ShooterSubsystem extends LoggedSubsystem {
     CANSparkMax shooterMotor1, shooterMotor2;
 
     private boolean hasRing;
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Manual Shot");
+
+    private SimpleWidget lamePower = tab.add("Manual Power", 1)
+            .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 2, "publish_all", true))
+            .withSize(2, 1).withPosition(0, 0);
+
+    private SimpleWidget lameAngle = tab.add("Manual Angle", 48)
+            .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 90, "publish_all", true))
+            .withSize(2, 1).withPosition(0, 1);
 
     public ShooterSubsystem() {
         shooterMotor1 = new CANSparkMax(shooterMotor1ID, CANSparkLowLevel.MotorType.kBrushless);
@@ -85,6 +94,14 @@ public class ShooterSubsystem extends LoggedSubsystem {
     public void setShooterSpeed(double speed){
         shooterMotor1.getPIDController().setReference(speed, CANSparkBase.ControlType.kVelocity);
         shooterMotor2.getPIDController().setReference(speed, CANSparkBase.ControlType.kVelocity);
+    }
+
+    public double getLamePower(){
+        return lamePower.getEntry().getDouble(1);
+    }
+
+    public double getLameAngle(){
+        return lameAngle.getEntry().getDouble(48);
     }
 
     public CANSparkMax getShooterMotor1() {
