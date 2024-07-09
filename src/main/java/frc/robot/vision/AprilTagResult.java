@@ -1,5 +1,8 @@
 package frc.robot.vision;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 
 import java.util.Objects;
@@ -22,6 +25,17 @@ public class AprilTagResult {
 
     public Transform3d getAprilTagLocation() {
         return aprilTagLocation;
+    }
+
+    public Transform3d getAprilTagLocation(boolean robotEnabled, AprilTagFieldLayout fieldLayout, Rotation2d gyro) {
+        if (robotEnabled) {
+            return new Transform3d(aprilTagLocation.getTranslation(),
+                    new Rotation3d(aprilTagLocation.getRotation().getX(), aprilTagLocation.getRotation().getY(),
+                            gyro.plus(new Rotation2d(camera.getCameraPostion().getRotation().getZ()))
+                                    .plus(fieldLayout.getTags().get(id).pose.getRotation().toRotation2d()).getRadians()));
+        } else {
+            return aprilTagLocation;
+        }
     }
 
     public int getId() {

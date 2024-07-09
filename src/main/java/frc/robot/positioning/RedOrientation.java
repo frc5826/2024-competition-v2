@@ -90,6 +90,9 @@ public class RedOrientation implements Orientation {
     }
 
     @Override
+    public Pose2d getSpeakerLineupPos() {return new Pose2d(14.5, 5.54, Rotation2d.fromDegrees(180));}
+
+    @Override
     public boolean isValid() {
         return true;
     }

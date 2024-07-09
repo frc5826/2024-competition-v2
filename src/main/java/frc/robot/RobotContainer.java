@@ -8,6 +8,7 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -27,6 +28,7 @@ import frc.robot.commands.arm.TargetSpeakerCommand;
 import frc.robot.commands.auto.AutoCommandGroup;
 import frc.robot.commands.climb.ClimberCommand;
 import frc.robot.commands.drive.AutoDriveToRingCommand;
+import frc.robot.commands.drive.PathThenFollowCommand;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.IntakeCommandGroup;
@@ -37,6 +39,7 @@ import frc.robot.commands.shoot.ShootSpeakerCommandGroup;
 import frc.robot.commands.shoot.ShooterCommand;
 import frc.robot.led.TeensyLED;
 import frc.robot.positioning.FieldOrientation;
+import frc.robot.positioning.Orientation;
 import frc.robot.subsystems.*;
 
 import java.io.File;
@@ -110,6 +113,9 @@ public class RobotContainer
                     swerveSubsystem.zeroGyro();
                     xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
                 }).finallyDo(() -> xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0)));
+
+        new Trigger(xbox::getBButton).whileTrue(new PathThenFollowCommand(Orientation::getSpeakerLineupPos, Orientation::getSpeakerPark, FieldOrientation::getOrientation, localizationSubsystem)
+                .andThen(new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem, armSubsystem, localizationSubsystem, swerveSubsystem)));
     }
 
     private void setupButtonBoardBindings() {

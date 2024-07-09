@@ -50,7 +50,7 @@ public class LocalizationSubsystem extends SubsystemBase {
 
     private Rotation2d rotationTarget;
 
-    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.25, 0.25, Units.degreesToRadians(10));
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(10));
 
     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(5));
 
@@ -114,7 +114,7 @@ public class LocalizationSubsystem extends SubsystemBase {
                     processed.put(result.getId(), result);
                     Optional<Pose3d> tagPose = fieldLayout.getTagPose(result.getId());
                     if (tagPose.isPresent()) {
-                        Pose3d camPose = tagPose.get().transformBy(result.getAprilTagLocation().inverse());
+                        Pose3d camPose = tagPose.get().transformBy(result.getAprilTagLocation(DriverStation.isEnabled(), fieldLayout, swerveSubsystem.getGyroRotation()).inverse());
                         Pose3d robotPose = camPose.transformBy(result.getCamera().getRobotLocation());
                         robotPos = robotPose;
 
