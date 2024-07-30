@@ -55,7 +55,8 @@ public final class Constants
         public static final int rotateEncoderID = 3;
         public static final int rotateMotor1ID = 11;
         public static final int rotateMotor2ID = 12;
-        public static final double armOffset = 0.725;
+        public static final double armOffset = 0.7;
+        //TODO redo arm pid after retensioning arm chain
         public static final double cRotateP = 6;
         public static final double cRotateI = 0;
         public static final double cRotateD = 0;

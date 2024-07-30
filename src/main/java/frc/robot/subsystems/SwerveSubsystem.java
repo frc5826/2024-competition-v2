@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import swervelib.SwerveDrive;
@@ -123,4 +124,7 @@ public class SwerveSubsystem extends LoggedSubsystem {
         return swerveDrive.getModulePositions();
     }
 
+    public Rotation2d getDriverOffest() {
+        return new Rotation2d(DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? Math.PI : 0);
+    }
 }

@@ -29,10 +29,11 @@ public class AprilTagResult {
 
     public Transform3d getAprilTagLocation(boolean robotEnabled, AprilTagFieldLayout fieldLayout, Rotation2d gyro) {
         if (robotEnabled) {
-            return new Transform3d(aprilTagLocation.getTranslation(),
+            Transform3d gyroAdjusted = new Transform3d(aprilTagLocation.getTranslation(),
                     new Rotation3d(aprilTagLocation.getRotation().getX(), aprilTagLocation.getRotation().getY(),
-                            gyro.plus(new Rotation2d(camera.getCameraPostion().getRotation().getZ()))
-                                    .plus(fieldLayout.getTags().get(id).pose.getRotation().toRotation2d()).getRadians()));
+                            (gyro.plus(new Rotation2d(camera.getCameraPostion().getRotation().getZ()))
+                                    .plus(new Rotation2d(fieldLayout.getTagPose(id).get().getRotation().getZ()))).getRadians()));
+            return gyroAdjusted;
         } else {
             return aprilTagLocation;
         }

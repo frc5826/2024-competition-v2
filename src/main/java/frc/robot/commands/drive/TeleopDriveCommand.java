@@ -55,7 +55,7 @@ public class TeleopDriveCommand extends LoggedCommand {
                 bandedAngle * swerveSubsystem.maximumAngularVel);
 
         if (xboxLeft.getAsDouble() < 0.5 && xboxRight.getAsDouble() < 0.5) {
-            swerveSubsystem.driveFieldOriented(speeds);
+            swerveSubsystem.driveFieldOriented(ChassisSpeeds.fromFieldRelativeSpeeds(speeds,swerveSubsystem.getDriverOffest()));
         } else if (xboxLeft.getAsDouble() > 0.5) {
             swerveSubsystem.driveRobotOriented(new ChassisSpeeds(-0.4, 0, 0));
         } else if(xboxRight.getAsDouble() > 0.5) {

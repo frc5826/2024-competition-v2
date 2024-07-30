@@ -88,6 +88,11 @@ public class UnknownOrientation implements Orientation {
     }
 
     @Override
+    public Pose2d getSpeakerLineupPos() {
+        return null;
+    }
+
+    @Override
     public boolean isValid() {
         return false;
     }

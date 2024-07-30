@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.arm.ArmCommand;
+import frc.robot.commands.conglomerate.ScoreCommandGroup;
 import frc.robot.commands.drive.AutoDriveToRingCommand;
 import frc.robot.commands.drive.PathCommand;
 import frc.robot.commands.drive.PathWithStopDistance;
@@ -51,15 +52,15 @@ public class AutoCommandGroup extends SequentialCommandGroup {
 
         this.ringCount = ringCount;
 
-        addCommands(new ArmCommand(armSubsystem, homeArmAngle));
+        //addCommands(new ArmCommand(armSubsystem, homeArmAngle));
 
         if (getOrientation().isValid()) {
 
             addCommands(
                     new InstantCommand(() -> {
                         //TODO is this causing problems?
-                        swerveSubsystem.setGyro(new Rotation3d(0, 0, localizationSubsystem.getCurrentPose().getRotation().getRadians() + (DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? Math.PI : 0 )));
-                        System.err.println("Auto Started at: "+localizationSubsystem.getCurrentPose());
+                        swerveSubsystem.setGyro(new Rotation3d(0, 0, localizationSubsystem.getCurrentPose().getRotation().getRadians()));
+                        localizationSubsystem.reset(localizationSubsystem.getCurrentPose());
                     }),
 
                     //Shoots initial ring
@@ -90,20 +91,21 @@ public class AutoCommandGroup extends SequentialCommandGroup {
 //                                    new PathWithStopDistance(localizationSubsystem, FieldOrientation.getOrientation().getSpeakerTargetPos(),
 //                                            3, true).onlyIf(intakeSubsystem::hasRing),
 
-                                    new PathCommand(FieldOrientation::getOrientation, orientation -> {
-                                        Translation2d shootTranslation = shootPose.getTranslation();
-                                        Rotation2d speakerRotation = Rotation2d.fromRadians(ShooterMath.getSpeakerTurn(orientation.getSpeakerTargetPos(), shootPose, true));
-
-                                        System.out.println("AUTO PATH - TARGET POSE: " + orientation.getSpeakerTargetPos());
-                                        System.out.println("AUTO PATH - CURRENT POSE: " + shootPose);
-                                        System.out.println("AUTO PATH - SPEAKER: " + true);
-
-                                        return new Pose2d(shootTranslation, speakerRotation);
-                                    }, localizationSubsystem).onlyIf(intakeSubsystem::hasRing),
-                                    new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem, armSubsystem,
-                                            localizationSubsystem, swerveSubsystem).onlyIf(intakeSubsystem::hasRing)
-
-                            );
+//                                    new PathCommand(FieldOrientation::getOrientation, orientation -> {
+//                                        Translation2d shootTranslation = shootPose.getTranslation();
+//                                        Rotation2d speakerRotation = Rotation2d.fromRadians(ShooterMath.getSpeakerTurn(orientation.getSpeakerTargetPos(), shootPose, true));
+//
+//                                        System.out.println("AUTO PATH - TARGET POSE: " + orientation.getSpeakerTargetPos());
+//                                        System.out.println("AUTO PATH - CURRENT POSE: " + shootPose);
+//                                        System.out.println("AUTO PATH - SPEAKER: " + true);
+//
+//                                        return new Pose2d(shootTranslation, speakerRotation);
+//                                    }, localizationSubsystem).onlyIf(intakeSubsystem::hasRing),
+//                                    new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem, armSubsystem,
+//                                            localizationSubsystem, swerveSubsystem).onlyIf(intakeSubsystem::hasRing)
+//
+//                            );
+                                    new ScoreCommandGroup(armSubsystem, intakeSubsystem, shooterSubsystem, localizationSubsystem, swerveSubsystem).onlyIf(intakeSubsystem::hasRing));
 
                         }
                     }

@@ -154,6 +154,13 @@ public class LocalizationSubsystem extends SubsystemBase {
         return bestRightRing;
     }
 
+    public void reset(Pose2d position) {
+        poseEstimator.resetPosition(
+                swerveSubsystem.getGyroRotation(),
+                swerveSubsystem.getModulePositions(),
+                position);
+    }
+
     public void reset() {
         poseEstimator.resetPosition(
                 swerveSubsystem.getGyroRotation(),
@@ -195,7 +202,7 @@ public class LocalizationSubsystem extends SubsystemBase {
     public Command buildPath(Pose2d targetPose) {
         PathConstraints constraints = new PathConstraints(
                 3.1,
-                4,
+                2,
                 2 * Math.PI,
                 3 * Math.PI);
 
@@ -225,9 +232,9 @@ public class LocalizationSubsystem extends SubsystemBase {
                 .withSize(2,2);
 
 
-//        position.addDouble("Robot X", ()-> getCurrentPose().getX());
-//        position.addDouble("Robot Y", ()-> getCurrentPose().getY());
-//        position.addDouble("Robot rotation", ()-> swerveSubsystem.getHeading().getDegrees());
+        position.addDouble("Robot X", ()-> getCurrentPose().getX());
+        position.addDouble("Robot Y", ()-> getCurrentPose().getY());
+        position.addDouble("Robot rotation", ()-> swerveSubsystem.getHeading().getDegrees());
 
 
         ShuffleboardLayout robot3DPose = tab.getLayout("robot 3d pose", BuiltInLayouts.kList)
@@ -236,9 +243,10 @@ public class LocalizationSubsystem extends SubsystemBase {
 
         tab.add("Reorient Gyro", new InstantCommand(() -> {
                     if(getOrientation().isValid()){
-                        swerveSubsystem.setGyro(new Rotation3d(0, 0, getCurrentPose().getRotation().getRadians() + (DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? Math.PI : 0 )));
+                        swerveSubsystem.setGyro(new Rotation3d(0, 0, getCurrentPose().getRotation().getRadians()));
+                        poseEstimator.resetPosition(swerveSubsystem.getGyroRotation(),swerveSubsystem.getModulePositions(),getCurrentPose());
                     }
-                }))
+                }).ignoringDisable(true))
                 .withSize(2, 1)
                 .withPosition(0,3);
 

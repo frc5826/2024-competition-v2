@@ -35,7 +35,7 @@ public class SpinupShooterCommand extends LoggedCommand {
         super.end(interrupted);
 
         if (interrupted) {
-            shooterSubsystem.setShooterOutput(0);
+            shooterSubsystem.setShooterOutput(Constants.maxShooterRPM);
         }
     }
 }

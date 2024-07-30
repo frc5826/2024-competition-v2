@@ -8,8 +8,10 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -27,17 +29,16 @@ import frc.robot.commands.arm.ArmCommand;
 import frc.robot.commands.arm.TargetSpeakerCommand;
 import frc.robot.commands.auto.AutoCommandGroup;
 import frc.robot.commands.climb.ClimberCommand;
+import frc.robot.commands.conglomerate.ScoreCommandGroup;
 import frc.robot.commands.drive.AutoDriveToRingCommand;
 import frc.robot.commands.drive.PathThenFollowCommand;
 import frc.robot.commands.drive.TeleopDriveCommand;
+import frc.robot.commands.drive.TurnToCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.IntakeCommandGroup;
 import frc.robot.commands.intake.IntakeSecondHalfCommandGroup;
 import frc.robot.commands.led.FlashLEDCommand;
-import frc.robot.commands.shoot.LameShootCommand;
-import frc.robot.commands.shoot.ShootSpeakerCommandGroup;
-import frc.robot.commands.shoot.ShooterCommand;
-import frc.robot.commands.shoot.SuppliedLameShootCommand;
+import frc.robot.commands.shoot.*;
 import frc.robot.led.TeensyLED;
 import frc.robot.positioning.FieldOrientation;
 import frc.robot.positioning.Orientation;
@@ -111,12 +112,11 @@ public class RobotContainer
 
         new Trigger(xbox::getBackButton).and(xbox::getStartButton).debounce(1)
                 .whileTrue(new RunCommand(() -> {
-                    swerveSubsystem.zeroGyro();
+                    swerveSubsystem.setGyro(new Rotation3d(0, 0, DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? Math.PI : 0) );
                     xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
                 }).finallyDo(() -> xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0)));
 
-        new Trigger(xbox::getBButton).whileTrue(new PathThenFollowCommand(Orientation::getSpeakerLineupPos, Orientation::getSpeakerPark, FieldOrientation::getOrientation, localizationSubsystem)
-                .andThen(new ShootSpeakerCommandGroup(shooterSubsystem, intakeSubsystem, armSubsystem, localizationSubsystem, swerveSubsystem)));
+        new Trigger(xbox::getBButton).whileTrue(new ScoreCommandGroup(armSubsystem, intakeSubsystem, shooterSubsystem, localizationSubsystem, swerveSubsystem));
     }
 
     private void setupButtonBoardBindings() {
