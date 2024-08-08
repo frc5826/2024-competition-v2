@@ -39,7 +39,7 @@ public final class Constants
     public static final double climbUpPower = 0.25;
     public static final double climbDownPower = -1;
 
-    public static final double armErrorTolerance = 0.0075;
+    public static final double armErrorTolerance = 0.01;
 
     public static final int climberLeftID = 9;
     public static final int climberRightID = 10;
@@ -55,7 +55,7 @@ public final class Constants
         public static final int rotateEncoderID = 3;
         public static final int rotateMotor1ID = 11;
         public static final int rotateMotor2ID = 12;
-        public static final double armOffset = 0.7;
+        public static final double armOffset = 0.71;
         //TODO redo arm pid after retensioning arm chain
         public static final double cRotateP = 6;
         public static final double cRotateI = 0;
@@ -77,7 +77,7 @@ public final class Constants
     public static final double cTurnDeadband = 0.15;
 
     //shooting constants
-    public static final double cSpeakerTargetHeight = 2.15;
+    public static final double cSpeakerTargetHeight = 2.3;
     public static final double heightCussion = 0;
     public static final double averageArmHeight = 1;
 
@@ -86,10 +86,10 @@ public final class Constants
     public static final double trackRingVel = 3;
 
     public static final PathConstraints pathConstraints = new PathConstraints(
-            3.6, //TODO max this then tune PID
-            4.0,
+            3.6,
+            2.5,
             2 * Math.PI,
-            2 * Math.PI);
+            1.5 * Math.PI);
 
     public static final double maxVelocity = 3.6; //doesn't make robot faster
     public static final Joystick buttonPanel = new Joystick(2);

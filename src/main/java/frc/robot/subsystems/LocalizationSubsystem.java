@@ -193,7 +193,7 @@ public class LocalizationSubsystem extends SubsystemBase {
                     // This will flip the path being followed to the red side of the field.
                     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
                     var alliance = DriverStation.getAlliance();
-                    return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+                    return false;
                 },
                 swerveSubsystem // Reference to this subsystem to set requirements
         );
@@ -309,5 +309,9 @@ public class LocalizationSubsystem extends SubsystemBase {
 
     public double timeSinceSeenRing(){
         return ((double)(System.currentTimeMillis() - lastTimeRingSeen)) / 1000;
+    }
+
+    public SwerveSubsystem getSwerveSubsystem() {
+        return swerveSubsystem;
     }
 }

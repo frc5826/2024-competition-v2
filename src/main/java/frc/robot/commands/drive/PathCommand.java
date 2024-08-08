@@ -23,6 +23,7 @@ public class PathCommand extends LoggedCommand {
         this.orientationSupplier = orientationSupplier;
         this.positionSupplier = positionSupplier;
         this.localizationSubsystem = localizationSubsystem;
+        addRequirements(localizationSubsystem.getSwerveSubsystem());
     }
 
     @Override

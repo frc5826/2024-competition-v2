@@ -2,6 +2,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.commands.LoggedCommand;
 import frc.robot.positioning.Orientation;
 import frc.robot.subsystems.LocalizationSubsystem;
@@ -11,7 +12,7 @@ import java.util.function.Supplier;
 
 public class PathThenFollowCommand extends LoggedCommand {
 
-    private LocalizationSubsystem localizationSubsystem;
+    private final LocalizationSubsystem localizationSubsystem;
 
     private final Supplier<Orientation> orientationSupplier;
 
@@ -26,6 +27,7 @@ public class PathThenFollowCommand extends LoggedCommand {
         this.orientationSupplier = orientationSupplier;
         this.endPositionSupplier = endPositionSupplier;
         this.startPositionSupplier = startPositionSupplier;
+        addRequirements(localizationSubsystem.getSwerveSubsystem());
     }
 
     @Override

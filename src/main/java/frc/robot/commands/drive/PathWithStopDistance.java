@@ -28,6 +28,8 @@ public class PathWithStopDistance extends LoggedCommand {
         this.stopDistance = stopDistance;
 
         this.inverted = inverted;
+
+        addRequirements(localizationSubsystem.getSwerveSubsystem());
     }
 
     @Override

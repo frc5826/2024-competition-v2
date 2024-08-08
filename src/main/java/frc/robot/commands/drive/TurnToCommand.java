@@ -18,7 +18,7 @@ public class TurnToCommand extends LoggedCommand {
     private SwerveSubsystem swerveSubsystem;
     private final Supplier<Pose2d> pose;
 
-    private PID turnPID = new PID(Constants.cTurnPID, 6, 1.25, 0.005, this::getTurn);
+    private PID turnPID = new PID(Constants.cTurnPID, 6, .75, 0.003, this::getTurn);
     private boolean speaker;
 
     public TurnToCommand(LocalizationSubsystem localizationSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Pose2d> poseToTurnTo, boolean speaker) {

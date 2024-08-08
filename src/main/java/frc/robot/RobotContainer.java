@@ -40,6 +40,7 @@ import frc.robot.commands.intake.IntakeSecondHalfCommandGroup;
 import frc.robot.commands.led.FlashLEDCommand;
 import frc.robot.commands.shoot.*;
 import frc.robot.led.TeensyLED;
+import frc.robot.math.ShooterMath;
 import frc.robot.positioning.FieldOrientation;
 import frc.robot.positioning.Orientation;
 import frc.robot.subsystems.*;
@@ -116,7 +117,7 @@ public class RobotContainer
                     xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
                 }).finallyDo(() -> xbox.setRumble(GenericHID.RumbleType.kBothRumble, 0)));
 
-        new Trigger(xbox::getBButton).whileTrue(new ScoreCommandGroup(armSubsystem, intakeSubsystem, shooterSubsystem, localizationSubsystem, swerveSubsystem));
+        new Trigger(xbox::getBButton).whileTrue(new ScoreCommandGroup(armSubsystem, intakeSubsystem, shooterSubsystem, localizationSubsystem, swerveSubsystem, Orientation::getSpeakerLineupPos, Orientation::getSpeakerPark));
     }
 
     private void setupButtonBoardBindings() {
@@ -224,7 +225,8 @@ public class RobotContainer
         boolean endPose = false;
 
         Pose2d endLoc = new Pose2d(endX.get(), endY.get(), Rotation2d.fromDegrees(endRotation.get()));
-        Pose2d shootPose = new Pose2d(shootX.get(), shootY.get(), Rotation2d.fromDegrees(0));
+        Pose2d shootPose = new Pose2d(shootX.get(), shootY.get(), ShooterMath.getAngleToSpeaker(getOrientation().getSpeakerTargetPos(), new Pose2d(shootX.get(), shootY.get(), new Rotation2d())));
+        autoRings = 0;
 
         for (int i = 0; i < 8; i++) {
             if (autoOptions.get(i).getSelected() != getOrientation().getNothingPose()) {

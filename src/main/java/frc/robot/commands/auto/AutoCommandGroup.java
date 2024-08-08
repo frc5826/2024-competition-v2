@@ -105,7 +105,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
 //                                            localizationSubsystem, swerveSubsystem).onlyIf(intakeSubsystem::hasRing)
 //
 //                            );
-                                    new ScoreCommandGroup(armSubsystem, intakeSubsystem, shooterSubsystem, localizationSubsystem, swerveSubsystem).onlyIf(intakeSubsystem::hasRing));
+                                    new ScoreCommandGroup(armSubsystem, intakeSubsystem, shooterSubsystem, localizationSubsystem, swerveSubsystem, (x) -> shootPose, (x) -> shootPose).onlyIf(intakeSubsystem::hasRing));
 
                         }
                     }

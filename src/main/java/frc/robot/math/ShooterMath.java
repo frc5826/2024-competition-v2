@@ -1,6 +1,7 @@
 package frc.robot.math;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 
 public class ShooterMath {
@@ -44,6 +45,11 @@ public class ShooterMath {
         return -ShooterMath.fixSpin(targetPose.getTranslation()
                 .minus(currentPose.getTranslation()).getAngle().getRadians()
                 - currentPose.getRotation().getRadians() - (speaker ? Math.PI : 0));
+    }
+
+    public static Rotation2d getAngleToSpeaker(Pose2d targetPose, Pose2d pose) {
+        return targetPose.getTranslation()
+                .minus(pose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(180));
     }
 
 }
